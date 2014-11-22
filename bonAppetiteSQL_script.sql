@@ -9,8 +9,7 @@ USE `mydb` ;
 -- Table `mydb`.`User`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb`.`User` (
-  `userName` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`userName`))
+  `userName` VARCHAR(45) NOT NULL)
 ENGINE = InnoDB;
 
 
@@ -18,8 +17,7 @@ ENGINE = InnoDB;
 -- Table `mydb`.`Chef`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb`.`Chef` (
-  `userName` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`userName`))
+  `userName` VARCHAR(45) NOT NULL)
 ENGINE = InnoDB;
 
 
@@ -52,7 +50,6 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Payment` (
   `userName` VARCHAR(45) NOT NULL,
   `address` VARCHAR(85) NOT NULL,
   `creditCard` VARCHAR(16) NOT NULL,
-  PRIMARY KEY (`userName`),
   CONSTRAINT `userName`
     FOREIGN KEY (`userName`)
     REFERENCES `mydb`.`User` (`userName`)
@@ -86,8 +83,9 @@ CREATE TABLE IF NOT EXISTS `mydb`.`WeeklyRecipes` (
   `weeklyId` INT NOT NULL,
   `recipeId` INT NOT NULL,
   `week` DATE NULL,
-  PRIMARY KEY (`weeklyId`, `recipeId`),
+  PRIMARY KEY (`weeklyId`),
   INDEX `fk_WeeklyRecipes_1_idx` (`recipeId` ASC),
+  UNIQUE INDEX `weeklyId_UNIQUE` (`weeklyId` ASC, `recipeId` ASC),
   CONSTRAINT `fk_WeeklyRecipes_1`
     FOREIGN KEY (`recipeId`)
     REFERENCES `mydb`.`Recipe` (`recipeId`)
@@ -109,7 +107,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Order` (
   `accepted` TINYINT(1) NULL,
   `comment` VARCHAR(255) NULL,
   `orderComplete` VARCHAR(45) NULL,
-  PRIMARY KEY (`weeklyId`, `userName`),
+  PRIMARY KEY (`weeklyId`),
   INDEX `fk_Order_1_idx` (`userName` ASC),
   CONSTRAINT `fk_Order_1`
     FOREIGN KEY (`userName`)
@@ -139,7 +137,7 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `mydb`.`Ingredient` (
   `ingredientName` VARCHAR(45) NOT NULL,
   `type` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`ingredientName`, `type`),
+  PRIMARY KEY (`ingredientName`),
   INDEX `fk_Ingredient_1_idx` (`type` ASC),
   CONSTRAINT `fk_Ingredient_1`
     FOREIGN KEY (`type`)
@@ -158,7 +156,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`RecipeIngredient` (
   `quantity` INT NULL,
   INDEX `fk_RecipeIngredient_1_idx` (`recipeId` ASC),
   INDEX `fk_RecipeIngredient_2_idx` (`ingredientName` ASC),
-  PRIMARY KEY (`ingredientName`, `recipeId`),
+  UNIQUE INDEX `recipeId_UNIQUE` (`recipeId` ASC, `ingredientName` ASC),
   CONSTRAINT `fk_RecipeIngredient_1`
     FOREIGN KEY (`recipeId`)
     REFERENCES `mydb`.`Recipe` (`recipeId`)
@@ -187,7 +185,7 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `mydb`.`Preference` (
   `userName` VARCHAR(45) NOT NULL,
   `cuisineName` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`userName`, `cuisineName`),
+  PRIMARY KEY (`cuisineName`),
   INDEX `fk_Preference_2_idx` (`cuisineName` ASC),
   CONSTRAINT `fk_Preference_1`
     FOREIGN KEY (`userName`)
@@ -217,8 +215,8 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `mydb`.`RestrictedType` (
   `restriction` VARCHAR(45) NOT NULL,
   `type` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`restriction`, `type`),
   INDEX `fk_RestrictedType_2_idx` (`type` ASC),
+  UNIQUE INDEX `restriction_UNIQUE` (`restriction` ASC, `type` ASC),
   CONSTRAINT `fk_RestrictedType_1`
     FOREIGN KEY (`restriction`)
     REFERENCES `mydb`.`Restriction` (`restriction`)
@@ -238,8 +236,8 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `mydb`.`Diet` (
   `userName` VARCHAR(45) NOT NULL,
   `restriction` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`userName`, `restriction`),
   INDEX `fk_Diet_2_idx` (`restriction` ASC),
+  UNIQUE INDEX `userName_UNIQUE` (`userName` ASC, `restriction` ASC),
   CONSTRAINT `fk_Diet_1`
     FOREIGN KEY (`userName`)
     REFERENCES `mydb`.`User` (`userName`)
