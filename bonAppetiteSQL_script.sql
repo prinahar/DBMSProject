@@ -6,13 +6,10 @@ CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8 COLLATE utf8_gener
 USE `mydb` ;
 
 -- -----------------------------------------------------
--- Table `mydb`.`Person`
+-- Table `mydb`.`User`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Person` (
-  `firstName` VARCHAR(45) NOT NULL,
+CREATE TABLE IF NOT EXISTS `mydb`.`User` (
   `userName` VARCHAR(45) NOT NULL,
-  `lastName` VARCHAR(45) NOT NULL,
-  `password` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`userName`))
 ENGINE = InnoDB;
 
@@ -22,26 +19,29 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb`.`Chef` (
   `userName` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`userName`),
-  CONSTRAINT `userName`
-    FOREIGN KEY (`userName`)
-    REFERENCES `mydb`.`Person` (`userName`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE)
+  PRIMARY KEY (`userName`))
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`User`
+-- Table `mydb`.`Person`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`User` (
-  `userName` VARCHAR(45) NOT NULL,
+CREATE TABLE IF NOT EXISTS `mydb`.`Person` (
+  `firstName` VARCHAR(45) NOT NULL,
+  `userName` VARCHAR(45) NULL,
+  `lastName` VARCHAR(45) NOT NULL,
+  `password` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`userName`),
-  CONSTRAINT `userName`
+  CONSTRAINT `fk_Person_1`
     FOREIGN KEY (`userName`)
-    REFERENCES `mydb`.`Person` (`userName`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE)
+    REFERENCES `mydb`.`User` (`userName`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Person_2`
+    FOREIGN KEY (`userName`)
+    REFERENCES `mydb`.`Chef` (`userName`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
