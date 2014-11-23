@@ -62,7 +62,7 @@ ENGINE = InnoDB;
 -- Table `mydb`.`Recipe`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb`.`Recipe` (
-  `recipeId` INT NOT NULL,
+  `recipeId` INT NOT NULL AUTO_INCREMENT,
   `description` VARCHAR(255) NULL,
   `picture` BLOB NULL,
   `parientId` INT NULL,
@@ -85,7 +85,7 @@ ENGINE = InnoDB;
 -- Table `mydb`.`WeeklyRecipes`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb`.`WeeklyRecipes` (
-  `weeklyRecipeId` INT NOT NULL,
+  `weeklyRecipeId` INT NOT NULL AUTO_INCREMENT,
   `recipeId` INT NULL,
   `week` DATE NULL,
   PRIMARY KEY (`weeklyRecipeId`),
