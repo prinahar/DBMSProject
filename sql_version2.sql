@@ -74,7 +74,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Recipe` (
     REFERENCES `mydb`.`Recipe` (`recipeId`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-    FOREIGN KEY (`cuisineName`)
+    FOREIGN KEY (`cuisine`)
     REFERENCES `mydb`.`Cuisines` (`cuisineName`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
