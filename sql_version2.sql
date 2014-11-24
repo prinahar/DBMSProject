@@ -68,7 +68,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Recipe` (
   `parientId` INT NULL,
   `childId` INT NULL,
   `steps` VARCHAR(45) NULL,
-  `cuisineName` VARCHAR(45) NOT NULL,
+  `cuisine` VARCHAR(45) NULL,
   PRIMARY KEY (`recipeId`),
     FOREIGN KEY (`parientId`)
     REFERENCES `mydb`.`Recipe` (`recipeId`)
