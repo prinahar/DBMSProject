@@ -66,16 +66,15 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Recipe` (
   `recipeId` INT NOT NULL AUTO_INCREMENT,
   `description` VARCHAR(255) NULL,
   `picture` BLOB NULL,
-  `parientId` INT NULL,
-  `childId` INT NULL,
-  `steps` VARCHAR(45) NULL,
+  `parentId` INT NULL,
+  `steps` TEXT NULL,
   `cuisine` VARCHAR(45) NULL,
   PRIMARY KEY (`recipeId`),
     FOREIGN KEY (`cuisine`)
     REFERENCES `mydb`.`Cuisines` (`cuisineName`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-    FOREIGN KEY (`childId`)
+    FOREIGN KEY (`parentId`)
     REFERENCES `mydb`.`Recipe` (`recipeId`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION
