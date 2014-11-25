@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+	<persistence-unit name="mydb">
+		<class>mydb.entities.Chef</class>
+		<class>mydb.entities.Cuisine</class>
+		<class>mydb.entities.Ingredient</class>
+		<class>mydb.entities.Order</class>
+		<class>mydb.entities.OrderPK</class>
+		<class>mydb.entities.Payment</class>
+		<class>mydb.entities.Person</class>
+		<class>mydb.entities.Recipe</class>
+		<class>mydb.entities.Restriction</class>
+		<class>mydb.entities.User</class>
+		<class>mydb.entities.WeeklyRecipe</class>
+		<class>mydb.entities.Type</class>
+	<properties>
+			<property name="eclipselink.jdbc.password" value=""/>
+			<property name="eclipselink.jdbc.user" value="root"/>
+			<property name="eclipselink.jdbc.driver" value="com.mysql.jdbc.Driver"/>
+			<property name="eclipselink.jdbc.url" value="jdbc:mysql://localhost:3306/mydb"/>
+			<property name="eclipselink.ddl-generation" value="drop-and-create-tables"/>  
+			<property name="eclipselink.logging.level" value="INFO"/>
+		</properties>
+	</persistence-unit>
+</persistence>
