@@ -1,7 +1,9 @@
 package mydb.dao;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
+
 import java.util.List;
 
 
@@ -37,7 +39,12 @@ public class Restriction implements Serializable {
 	public Restriction() {
 	}
 
-	public String getRestriction() {
+	public Restriction(String strRestriction)
+   {
+      this.restriction = strRestriction;
+   }
+
+   public String getRestriction() {
 		return this.restriction;
 	}
 
