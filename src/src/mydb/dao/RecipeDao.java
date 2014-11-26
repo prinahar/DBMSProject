@@ -3,6 +3,7 @@ package mydb.dao;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.persistence.Query;
 
 public class RecipeDao {
 	EntityManagerFactory factory = Persistence.createEntityManagerFactory("mydb");
@@ -11,11 +12,19 @@ public class RecipeDao {
 	public RecipeDao(){
 		em = factory.createEntityManager();
 	}
-	public Recipe findPersonById(int id){
+	public Recipe findRecipeById(int id){
 		em.getTransaction().begin();
 		Recipe r = em.find(Recipe.class, id);
 		em.getTransaction().commit();
 		return r;
+	}
+	public Recipe findRecipeByDescript(String description) {
+	   em.getTransaction().begin();
+	   Query q = em.createQuery("select r from Recipe r where r.description = :description");
+	   q.setParameter("description", description);
+	   Recipe recipe = (Recipe) q.getSingleResult();
+	   em.getTransaction().commit();
+	   return recipe;
 	}
 	public void addRecipe(Recipe r){
 		em.getTransaction().begin();
