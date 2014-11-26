@@ -30,7 +30,7 @@ public class ChefDao {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		ChefDao cdao = new ChefDao();
-		Chef c = new Chef()
+		Chef c = new Chef();
 	}
 
 }

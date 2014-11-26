@@ -1,7 +1,9 @@
 package mydb.dao;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
+
 import java.util.List;
 
 
@@ -38,7 +40,11 @@ public class Cuisine implements Serializable {
 	public Cuisine() {
 	}
 
-	public String getCuisineName() {
+   public Cuisine(String cuisineName) {
+      this.cuisineName = cuisineName;
+   }
+
+   public String getCuisineName() {
 		return this.cuisineName;
 	}
 
