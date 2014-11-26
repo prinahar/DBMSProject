@@ -1,6 +1,7 @@
 package mydb.dao;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
 
 
@@ -17,6 +18,20 @@ public class Person implements Serializable {
 	private String userName;
 
 	private String dtype;
+	
+
+
+	public Person(String userName, String dtype, String firstName,
+			String lastName, String password, Chef chef, User user) {
+		super();
+		this.userName = userName;
+		this.dtype = dtype;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.password = password;
+		this.chef = chef;
+		this.user = user;
+	}
 
 	private String firstName;
 
