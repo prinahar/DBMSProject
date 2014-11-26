@@ -1,6 +1,7 @@
 package mydb.dao;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
 
 /**
@@ -20,7 +21,11 @@ public class OrderPK implements Serializable {
 
 	public OrderPK() {
 	}
-	public int getWeeklyRecipeId() {
+	public OrderPK(int weeklyRecipeId, String userName) {
+      this.weeklyRecipeId = weeklyRecipeId;
+      this.userName = userName;
+   }
+   public int getWeeklyRecipeId() {
 		return this.weeklyRecipeId;
 	}
 	public void setWeeklyRecipeId(int weeklyRecipeId) {
