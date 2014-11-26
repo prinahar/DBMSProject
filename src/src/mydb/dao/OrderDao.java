@@ -26,7 +26,7 @@ public class OrderDao
    public Order findOrder(int weeklyRecipeId, String userName) {
       em.getTransaction().begin();
       OrderPK id = new OrderPK (weeklyRecipeId, userName);
-      Query q = em.createQuery("select o from Order o where id= :id");
+      Query q = em.createQuery("select o from Order o where o.id= :id");
       q.setParameter("id", id);
       Order order = (Order) q.getSingleResult();
       em.getTransaction().commit();

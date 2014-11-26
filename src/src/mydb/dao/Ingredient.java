@@ -1,7 +1,9 @@
 package mydb.dao;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
+
 import java.util.List;
 
 
@@ -38,7 +40,13 @@ public class Ingredient implements Serializable {
 	public Ingredient() {
 	}
 
-	public String getIngredientName() {
+	public Ingredient(String ingredientName, Type type)
+   {
+      this.ingredientName = ingredientName;
+      this.typeBean = type;
+   }
+
+   public String getIngredientName() {
 		return this.ingredientName;
 	}
 
