@@ -12,6 +12,7 @@ import javax.ws.rs.Produces;
 
 import mydb.dao.Cuisine;
 import mydb.dao.CuisineDao;
+import mydb.dao.Payment;
 import mydb.dao.Person;
 import mydb.dao.PersonDao;
 import mydb.dao.Restriction;
@@ -30,20 +31,37 @@ public class Rest {
 	@GET
 	@Path("/get/{id}")
 	@Produces("application/json")
-	public User get(@PathParam("id") String id){
+	public User getUser(@PathParam("id") String id){
 		User u = udao.findUser(id);
 		return u;
 	}
 	
 	@GET
-	@Path("/get/cuisines")
+	@Path("/get/{id}")
 	@Produces("application/json")
-	public List<Cuisine> get(){
-		List<Cuisine> lc = cdao.findAllCuisines();
-		
-		return lc;
+	public List<Cuisine> getPreferences(){
+	   User u = udao.findUser("id");
+	   List<Cuisine> preferences = u.getCuisines();
+	   return preferences;
 	}
+	@GET
+    @Path("/get/{id}")
+    @Produces("application/json")
+    public Payment getPaymentInfo(){
+       User u = udao.findUser("id");
+       Payment paymentInfo = u.getPayment();
+       return paymentInfo; 
+    }
+
+
 	
+	@GET
+    @Path("/get/preferences")
+    @Produces("application/json")
+    public List<Cuisine> get(){
+        List<Cuisine> lc = cdao.findAllCuisines();
+        return lc;
+    }
 	
 	
 	@Path("/createUser")
