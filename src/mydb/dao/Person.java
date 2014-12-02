@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 import javax.persistence.*;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 
 /**
  * The persistent class for the Person database table.
@@ -41,10 +43,12 @@ public class Person implements Serializable {
 
 	//bi-directional one-to-one association to Chef
 	@OneToOne(mappedBy="person")
+	@JsonIgnore
 	private Chef chef;
 
 	//bi-directional one-to-one association to User
 	@OneToOne(mappedBy="person")
+	@JsonIgnore
 	private User user;
 
 	public Person() {

@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 import javax.persistence.*;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import java.util.List;
 
 
@@ -30,6 +32,7 @@ public class Restriction implements Serializable {
 			@JoinColumn(name="userName")
 			}
 		)
+	@JsonIgnore
 	private List<User> users;
 
 	//bi-directional many-to-many association to Type
@@ -42,6 +45,7 @@ public class Restriction implements Serializable {
 				@JoinColumn(name="type")
 				}
 			)
+	@JsonIgnore
 	private List<Type> types;
 
 	public Restriction() {

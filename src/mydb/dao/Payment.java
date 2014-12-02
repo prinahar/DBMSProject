@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 import javax.persistence.*;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 
 /**
  * The persistent class for the Payment database table.
@@ -24,6 +26,7 @@ public class Payment implements Serializable {
 	//bi-directional one-to-one association to User
 	@OneToOne
 	@JoinColumn(name="userName", insertable = false, updatable = false)
+	@JsonIgnore
 	private User user;
 
 	public Payment(String userName, String address, String creditCard, User user) {

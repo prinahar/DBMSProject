@@ -1,6 +1,8 @@
 package mydb.dao;
 
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -39,6 +41,13 @@ public class CuisineDao
       em.getTransaction().commit();
       return cuisine;
    }
+   public List<Cuisine> findAllCuisines() {
+	      em.getTransaction().begin();
+	      Query q = em.createQuery("Select c from Cuisine c");
+	      List<Cuisine> lc = (List<Cuisine>) q.getResultList();
+	      em.getTransaction().commit();
+	      return lc;
+	   }
    public void updateCuisine(Cuisine cuisine, String cuisineName) {
       em.getTransaction().begin();
       cuisine.setCuisineName(cuisineName);

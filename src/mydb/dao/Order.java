@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 import javax.persistence.*;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import java.util.Date;
 
 
@@ -37,11 +39,13 @@ public class Order implements Serializable {
 
 	//bi-directional many-to-one association to WeeklyRecipe
 	@ManyToOne
+	@JsonIgnore
 	@JoinColumn(name="weeklyRecipeId")
 	private WeeklyRecipe weeklyRecipe;
 
 	//bi-directional many-to-one association to User
 	@ManyToOne
+	@JsonIgnore
 	@JoinColumn(name="userName", insertable = false, updatable = false)
 	private User user;
 

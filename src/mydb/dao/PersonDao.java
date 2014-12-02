@@ -19,7 +19,11 @@ public class PersonDao {
 	}
 	public Person addPerson(Person p){
 		em.getTransaction().begin();
-		em.persist(p);
+		Person old = em.find(Person.class, p.getUserName());
+		if(old == null)
+			em.persist(p);
+		else
+			p = old;
 		em.getTransaction().commit();
 		return p;
 	}
