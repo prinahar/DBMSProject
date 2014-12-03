@@ -27,79 +27,82 @@ public class Rest {
 	PersonDao pdao = new PersonDao();
 	RestrictionDao rdao = new RestrictionDao();
 	CuisineDao cdao = new CuisineDao();
-	
+
 	@GET
 	@Path("/get/{id}")
 	@Produces("application/json")
-	public User getUser(@PathParam("id") String id){
+	public User getUser(@PathParam("id") String id) {
 		User u = udao.findUser(id);
 		return u;
 	}
-	
+
 	@GET
-	@Path("/get/{id}")
+	@Path("/get/preference/{id}")
 	@Produces("application/json")
-	public List<Cuisine> getPreferences(){
-	   User u = udao.findUser("id");
-	   List<Cuisine> preferences = u.getCuisines();
-	   return preferences;
+	public List<Cuisine> getPreference(@PathParam("id") String id) {
+		System.out.println("Getting user");
+		User u = getUser(id);
+		List<Cuisine> preference = u.getCuisines();
+		System.out.println("Returning preferences");
+		return preference;
 	}
-	@GET
-    @Path("/get/{id}")
-    @Produces("application/json")
-    public Payment getPaymentInfo(){
-       User u = udao.findUser("id");
-       Payment paymentInfo = u.getPayment();
-       return paymentInfo; 
-    }
 
-
-	
 	@GET
-    @Path("/get/preferences")
-    @Produces("application/json")
-    public List<Cuisine> get(){
-        List<Cuisine> lc = cdao.findAllCuisines();
-        return lc;
-    }
-	
-	
+	@Path("/get/payment/{id}")
+	@Produces("application/json")
+	public Payment getPaymentInfo(@PathParam("id") String id) {
+		User u = getUser(id);
+		Payment paymentInfo = u.getPayment();
+		return paymentInfo;
+	}
+
+	@GET
+	@Path("/get/preferences")
+	@Produces("application/json")
+	public List<Cuisine> getAllPreferences() {
+		List<Cuisine> lc = cdao.findAllCuisines();
+		return lc;
+	}
+
 	@Path("/createUser")
 	@POST
 	@Consumes("application/json")
-	public String createUser(User u){
+	public String createUser(User u) {
 		Person p = u.getPerson();
 		pdao.addPerson(p);
-//		System.out.println(p.getFirstName());
-//		System.out.println(p.getDtype());
-//		System.out.println(p.getLastName());
-//		System.out.println(p.getPassword());
-//		System.out.println(p.getUserName());
+		// System.out.println(p.getFirstName());
+		// System.out.println(p.getDtype());
+		// System.out.println(p.getLastName());
+		// System.out.println(p.getPassword());
+		// System.out.println(p.getUserName());
 		List<Restriction> dummyRestrictionList = u.getRestrictions();
 		List<Restriction> realRestrictionList = new LinkedList<Restriction>();
-		if(dummyRestrictionList != null){
-			for(Restriction iter: dummyRestrictionList){
-				Restriction realRestriction = rdao.findRestrictionByName(iter.getRestriction());
+		if (dummyRestrictionList != null) {
+			for (Restriction iter : dummyRestrictionList) {
+				Restriction realRestriction = rdao.findRestrictionByName(iter
+						.getRestriction());
 				realRestrictionList.add(realRestriction);
 			}
 		}
-		
-	
+
 		List<Cuisine> dummyCuisines = u.getCuisines();
 		List<Cuisine> realCuisines = new LinkedList<Cuisine>();
-		if(dummyCuisines != null) {
-			for(Cuisine iter: dummyCuisines){
-				Cuisine realCuisine = cdao.findCuisineByName(iter.getCuisineName());
+		if (dummyCuisines != null) {
+			for (Cuisine iter : dummyCuisines) {
+				Cuisine realCuisine = cdao.findCuisineByName(iter
+						.getCuisineName());
 				realCuisines.add(realCuisine);
 			}
 		}
-		
-		
+
 		udao.addUser(p, realCuisines, realRestrictionList);
 		return u.getUserName();
 	}
+
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+//		Rest r = new Rest();
+//		List<Cuisine> p = r.getPreference("UserAlice");
+//		System.out.println(p);
 
 	}
 
