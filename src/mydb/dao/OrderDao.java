@@ -1,3 +1,4 @@
+
 package mydb.dao;
 
 
@@ -68,47 +69,47 @@ public class OrderDao
    }
 
    public List<Order> findOrderByUserAndWeek(User u, Date week) {
-	   em.getTransaction().begin();
-	   Query q = em.createQuery("Select o from Order o where o.user = :u and o.weeklyRecipe.week = :week");
-	   q.setParameter("u", u);
-	   q.setParameter("week", week);
-	   List<Order> orders = q.getResultList();
-	   em.getTransaction().commit();
-	   return orders;
+       em.getTransaction().begin();
+       Query q = em.createQuery("Select o from Order o where o.user = :u and o.weeklyRecipe.week = :week");
+       q.setParameter("u", u);
+       q.setParameter("week", week);
+       List<Order> orders = q.getResultList();
+       em.getTransaction().commit();
+       return orders;
    }
    public void updateOrderState(Order order, boolean accepted, boolean confirmation, boolean orderComplete) {
-	      em.getTransaction().begin();
-	      order.setAccepted(accepted);
-	      order.setConfirmation(confirmation);
-	      order.setOrderComplete(orderComplete);
-	      em.merge(order);
-	      em.getTransaction().commit();
+          em.getTransaction().begin();
+          order.setAccepted(accepted);
+          order.setConfirmation(confirmation);
+          order.setOrderComplete(orderComplete);
+          em.merge(order);
+          em.getTransaction().commit();
 
    }
    public void updateOrderComment(Order order, String comment, int rating) {
 
-	      em.getTransaction().begin();
+          em.getTransaction().begin();
 
-	      order.setComment(comment);
-	      order.setRating(rating);
+          order.setComment(comment);
+          order.setRating(rating);
 
-	      em.merge(order);
+          em.merge(order);
 
-	      em.getTransaction().commit();
+          em.getTransaction().commit();
 
    }
    
    public void updateOrderDeliverTime(Order order, int quantity) {
 
-	      em.getTransaction().begin();
+          em.getTransaction().begin();
 
-	      order.setQuantity(quantity);;
+          order.setQuantity(quantity);;
 
-	      em.merge(order);
+          em.merge(order);
 
-	      em.getTransaction().commit();
+          em.getTransaction().commit();
 
-	  }
+      }
    
    
    public void updateOrderDeliverTime(Order order, Date deliveryTime) {
@@ -144,30 +145,30 @@ public class OrderDao
    {
 
       // TODO Auto-generated method stub
-	   RecipeDao rdao = new RecipeDao();
-	   Recipe r2 = rdao.findRecipeByName("bad steak");
-	   
-	   WeeklyRecipeDao wrdao = new WeeklyRecipeDao();
-	   wrdao.createWeeklyRecipe(r2, new Date());
-	   List<WeeklyRecipe> wr = wrdao.findWeeklyRecipeByDate(new Date());
-	   
-	   System.out.println(wr.get(0).getRecipe().getDescription());
-	   System.out.println(wr.get(1).getRecipe().getDescription());
-	   
-	   UserDao udao = new UserDao();
-	   User u = udao.findUserByName("alice");
-	   
-	   OrderDao odao = new OrderDao();
-	   //Order order = odao.createOrder(wr.get(1), u, new Date(), 2);
-	   //Order order = odao.findOrder(wr.get(0), u);
-	   List<Order> orders = odao.findOrderByUserAndWeek(u, new Date());
-	   odao.updateOrderState(orders.get(0), true, true, true);
-	   for(Order iter: orders)
-		   System.out.println(iter.getAccepted());
-	   //System.out.println(order.getUser().getUserName()+" test user field of order");
-	   //System.out.println(order.getWeeklyRecipe().getRecipe().getDescription()+ " test weeklyrecipe field of order");
-//	   System.out.println(u.getOrders().get(0).getWeeklyRecipe().getRecipe().getDescription());
-//	   System.out.println(order.getWeeklyRecipe().getOrders().get(0));
+       RecipeDao rdao = new RecipeDao();
+       Recipe r2 = rdao.findRecipeByName("bad steak");
+       
+       WeeklyRecipeDao wrdao = new WeeklyRecipeDao();
+       wrdao.createWeeklyRecipe(r2, new Date());
+       List<WeeklyRecipe> wr = wrdao.findWeeklyRecipeByDate(new Date());
+       
+       System.out.println(wr.get(0).getRecipe().getDescription());
+       System.out.println(wr.get(1).getRecipe().getDescription());
+       
+       UserDao udao = new UserDao();
+       User u = udao.findUserByName("alice");
+       
+       OrderDao odao = new OrderDao();
+       //Order order = odao.createOrder(wr.get(1), u, new Date(), 2);
+       //Order order = odao.findOrder(wr.get(0), u);
+       List<Order> orders = odao.findOrderByUserAndWeek(u, new Date());
+       odao.updateOrderState(orders.get(0), true, true, true);
+       for(Order iter: orders)
+           System.out.println(iter.getAccepted());
+       //System.out.println(order.getUser().getUserName()+" test user field of order");
+       //System.out.println(order.getWeeklyRecipe().getRecipe().getDescription()+ " test weeklyrecipe field of order");
+//     System.out.println(u.getOrders().get(0).getWeeklyRecipe().getRecipe().getDescription());
+//     System.out.println(order.getWeeklyRecipe().getOrders().get(0));
 
    }
 
