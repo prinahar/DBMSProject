@@ -40,10 +40,8 @@ public class Rest {
 	@Path("/get/preference/{id}")
 	@Produces("application/json")
 	public List<Cuisine> getPreference(@PathParam("id") String id) {
-		System.out.println("Getting user");
 		User u = getUser(id);
 		List<Cuisine> preference = u.getCuisines();
-		System.out.println("Returning preferences");
 		return preference;
 	}
 
@@ -100,9 +98,7 @@ public class Rest {
 	}
 
 	public static void main(String[] args) {
-//		Rest r = new Rest();
-//		List<Cuisine> p = r.getPreference("UserAlice");
-//		System.out.println(p);
+		
 
 	}
 
