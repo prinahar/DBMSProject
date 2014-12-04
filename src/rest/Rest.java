@@ -121,11 +121,12 @@ public class Rest {
 				realCuisines.add(realCuisine);
 			}
 		}
-
 		udao.addUser(p, realCuisines, realRestrictionList);
 		return u.getUserName();
+		
+		//TODO: Chef finds Orders for the given week
 	}
-
+	
 	public static void main(String[] args) {
 //		Rest r = new Rest();
 
