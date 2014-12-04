@@ -1,5 +1,6 @@
 package rest;
 
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -19,6 +20,8 @@ import mydb.dao.Restriction;
 import mydb.dao.RestrictionDao;
 import mydb.dao.User;
 import mydb.dao.UserDao;
+import mydb.dao.WeeklyRecipe;
+import mydb.dao.WeeklyRecipeDao;
 
 @Path("/test")
 public class Rest {
@@ -27,6 +30,16 @@ public class Rest {
 	PersonDao pdao = new PersonDao();
 	RestrictionDao rdao = new RestrictionDao();
 	CuisineDao cdao = new CuisineDao();
+	WeeklyRecipeDao wrdao = new WeeklyRecipeDao();
+	
+	@GET
+	@Path("/getAllUsers")
+	@Produces("/application/json")
+	public List<User> getAllUsers() {
+		List<User> lu = udao.findAllUsers();
+		return lu;
+		
+	}
 
 	@GET
 	@Path("/getUser/{id}")
@@ -37,18 +50,9 @@ public class Rest {
 	}
 
 	@GET
-	@Path("/getPreference/{id}")
-	@Produces("application/json")
-	public List<Cuisine> getPreference(@PathParam("id") String id) {
-		User u = getUser(id);
-		List<Cuisine> preference = u.getCuisines();
-		return preference;
-	}
-
-	@GET
 	@Path("/getPayment/{id}")
 	@Produces("application/json")
-	public Payment getPaymentInfo(@PathParam("id") String id) {
+	public Payment getPayment(@PathParam("id") String id) {
 		User u = getUser(id);
 		Payment paymentInfo = u.getPayment();
 		return paymentInfo;
@@ -61,6 +65,7 @@ public class Rest {
 		List<Cuisine> lc = cdao.findAllCuisines();
 		return lc;
 	}
+
 	@GET
 	@Path("/getRestrictions")
 	@Produces("application/json")
@@ -68,7 +73,24 @@ public class Rest {
 		List<Restriction> lr = rdao.findAllRestrictions();
 		return lr;
 	}
-	 
+
+	@GET
+	@Path("/getPreference/{id}")
+	@Produces("application/json")
+	public List<Cuisine> getPreference(@PathParam("id") String id) {
+		User u = getUser(id);
+		List<Cuisine> preference = u.getCuisines();
+		return preference;
+	}
+
+	@GET
+	@Path("/getWeeklyRecipeByDate/{date}")
+	@Produces("/application/json")
+	public List<WeeklyRecipe> getWeeklyRecipe(@PathParam("date") Date date) {
+		List<WeeklyRecipe> lr = wrdao.findWeeklyRecipeByDate(date);
+		return lr;
+	}
+
 	@Path("/createUser")
 	@POST
 	@Consumes("application/json")
@@ -107,7 +129,6 @@ public class Rest {
 	public static void main(String[] args) {
 //		Rest r = new Rest();
 
-		
 	}
 
 }

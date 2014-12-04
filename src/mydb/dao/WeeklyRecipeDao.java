@@ -42,25 +42,18 @@ public class WeeklyRecipeDao
    //  WeeklyRecipe object should be added to recipe's WeeklyRecipes field 
    //  automatically
    public WeeklyRecipe createWeeklyRecipe(Recipe r, Date week) {
-
       em.getTransaction().begin();
       WeeklyRecipe rw = new WeeklyRecipe(week, null, r);
       em.persist(rw);
       em.getTransaction().commit();
       return rw;
-
    }
 
    public WeeklyRecipe findWeeklyRecipeById(int weeklyRecipeId){
-
       em.getTransaction().begin();
-
       WeeklyRecipe weeklyRecipe = em.find(WeeklyRecipe.class, weeklyRecipeId);
-
       em.getTransaction().commit();
-
       return weeklyRecipe;
-
    }
    public List<WeeklyRecipe> findWeeklyRecipeByDate(Date week) {
 	   em.getTransaction().begin();
