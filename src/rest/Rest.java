@@ -61,8 +61,14 @@ public class Rest {
 		List<Cuisine> lc = cdao.findAllCuisines();
 		return lc;
 	}
-
-
+	@GET
+	@Path("/getRestrictions")
+	@Produces("application/json")
+	public List<Restriction> getAllRestrictions() {
+		List<Restriction> lr = rdao.findAllRestrictions();
+		return lr;
+	}
+	 
 	@Path("/createUser")
 	@POST
 	@Consumes("application/json")
@@ -99,8 +105,9 @@ public class Rest {
 	}
 
 	public static void main(String[] args) {
-		
+//		Rest r = new Rest();
 
+		
 	}
 
 }
