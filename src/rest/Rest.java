@@ -29,7 +29,7 @@ public class Rest {
 	CuisineDao cdao = new CuisineDao();
 
 	@GET
-	@Path("/get/{id}")
+	@Path("/getUser/{id}")
 	@Produces("application/json")
 	public User getUser(@PathParam("id") String id) {
 		User u = udao.findUser(id);
@@ -37,7 +37,7 @@ public class Rest {
 	}
 
 	@GET
-	@Path("/get/preference/{id}")
+	@Path("/getPreference/{id}")
 	@Produces("application/json")
 	public List<Cuisine> getPreference(@PathParam("id") String id) {
 		User u = getUser(id);
@@ -46,7 +46,7 @@ public class Rest {
 	}
 
 	@GET
-	@Path("/get/payment/{id}")
+	@Path("/getPayment/{id}")
 	@Produces("application/json")
 	public Payment getPaymentInfo(@PathParam("id") String id) {
 		User u = getUser(id);
@@ -55,12 +55,13 @@ public class Rest {
 	}
 
 	@GET
-	@Path("/get/preferences")
+	@Path("/getPreferences")
 	@Produces("application/json")
 	public List<Cuisine> getAllPreferences() {
 		List<Cuisine> lc = cdao.findAllCuisines();
 		return lc;
 	}
+
 
 	@Path("/createUser")
 	@POST
