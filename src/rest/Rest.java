@@ -10,6 +10,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 
 import mydb.dao.Cuisine;
 import mydb.dao.CuisineDao;
@@ -44,11 +45,17 @@ public class Rest {
 	@GET
 	@Path("/login")
 	@Produces("application/json")
-	public String login(@QueryParam("id") String id, @QueryParam("pass") String pass){
-		User u = udao.findUser(id);
-		if(u == null)
-			return "false";
-		return "true";
+	public String login(@QueryParam("id") String id){
+		System.out.println(id);
+		String[] info = id.split("&");
+//		System.out.println(info.length);
+		String username = info[0];
+		String pass = info[1];
+		Person p = pdao.findPersonByName(username);
+		System.out.println(p.getFirstName());
+		if(p.getPassword().equals(pass))
+			return "true";
+		return "false";
 	}
 
 	@GET
