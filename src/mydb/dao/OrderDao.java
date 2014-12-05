@@ -42,17 +42,17 @@ public class OrderDao {
 		return order;
 	}
 	//Find Orders for the given week
-//	public List<Order> findAllOrders(Date week) {
-//		em.getTransaction().begin();
-//		Query q1 = em.createQuery("SELECT w.weeklyRecipeId FROM WeeklyRecipe w WHERE w.week = :week");
-//		q1.setParameter("week", week);
-//		int wrId = (Integer) q1.getSingleResult();
-//		Query q = em.createQuery("SELECT o FROM Order o WHERE o.weeklyRecipeId = :wrId");
-//		q.setParameter("weeklyRecipeId", wrId);
-//		List<Order> ordersForTheWeek = q.getResultList();
-//		em.getTransaction().commit();
-//		return ordersForTheWeek;
-//	}
+	public List<Order> findAllOrders(Date week) {
+		em.getTransaction().begin();
+		Query q1 = em.createQuery("SELECT w.weeklyRecipeId FROM WeeklyRecipe w WHERE w.week = :week");
+		q1.setParameter("week", week);
+		int wrId = (Integer) q1.getSingleResult();
+		Query q = em.createQuery("SELECT o FROM Order o WHERE o.weeklyRecipeId = :wrId");
+		q.setParameter("weeklyRecipeId", wrId);
+		List<Order> ordersForTheWeek = q.getResultList();
+		em.getTransaction().commit();
+		return ordersForTheWeek;
+	}
 
 	public List<Order> findOrderByUserAndWeek(User u, Date week) {
 		em.getTransaction().begin();
@@ -131,12 +131,12 @@ public class OrderDao {
 		// " test weeklyrecipe field of order");
 		// System.out.println(u.getOrders().get(0).getWeeklyRecipe().getRecipe().getDescription());
 		// System.out.println(order.getWeeklyRecipe().getOrders().get(0));
-//		Date d = new Date();
-//		d.setDate(02);
-//		d.setMonth(11);
-//		d.setYear(2014);
-//		
-//		System.out.println(odao.findAllOrders(d));
+		Date d = new Date();
+		d.setDate(02);
+		d.setMonth(11);
+		d.setYear(2014);
+		
+		System.out.println(odao.findAllOrders(d));
 
 	}
 

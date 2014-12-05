@@ -34,7 +34,7 @@ $(document).ready(function() {
 			$.each(response, function(key, value)  {
 				console.log(key);
 				console.log(value);
-				$("#cuisine").append("<option>" + value.cuisineName + "</option>");
+				$("#cuisine").append("<option value='CuisineName'>" + value.cuisineName + "</option>");
 			});
 			
 		}
@@ -47,8 +47,16 @@ var username = $("#username").val();
 var fname = $("#fname").val();
 var lname = $("#lname").val();
 var pass = $("#pass").val();
+var prefs = [];
+var selections = $("#cuisine > option:selected");
 
-var newUser = {"userName":username,"cuisines":null,"orders":null,"payment":null,"restrictions":null,"person":{"userName":username,"dtype":"user","firstName":fname,"lastName":lname,"password":pass}};
+for( var i = 0; i < selections.length; i++) {
+	prefs.push({cuisineName:selections[i].innerHTML});
+}
+
+//alert(JSON.stringify(prefs));
+
+var newUser = {"userName":username,"cuisines":prefs,"orders":null,"payment":null,"restrictions":null,"person":{"userName":username,"dtype":"user","firstName":fname,"lastName":lname,"password":pass}};
 alert(newUser);
 
 
