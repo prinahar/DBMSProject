@@ -40,6 +40,16 @@ public class Rest {
 		return lu;
 		
 	}
+	
+	@GET
+	@Path("/login")
+	@Produces("application/json")
+	public String login(@QueryParam("id") String id, @QueryParam("pass") String pass){
+		User u = udao.findUser(id);
+		if(u == null)
+			return "false";
+		return "true";
+	}
 
 	@GET
 	@Path("/getUser/{id}")
