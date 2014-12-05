@@ -23,7 +23,7 @@ import mydb.dao.UserDao;
 import mydb.dao.WeeklyRecipe;
 import mydb.dao.WeeklyRecipeDao;
 
-@Path("/test")
+@Path("")
 public class Rest {
 
 	UserDao udao = new UserDao();
@@ -121,6 +121,8 @@ public class Rest {
 				realCuisines.add(realCuisine);
 			}
 		}
+		//if(u.getRestrictions() == null)
+			System.out.println(u.getRestrictions().get(0).getRestriction());
 		udao.addUser(p, realCuisines, realRestrictionList);
 		return u.getUserName();
 		

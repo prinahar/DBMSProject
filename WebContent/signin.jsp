@@ -18,7 +18,7 @@
 <p><input id="pass" placeholder="Password" class="form-control"/></p>
 <p> <label> Cuisine Preferences </p>
 <select id='cuisine' multiple></select></label>
-<p> <label> Restritions </p>
+<p> <label> Restrictions </p>
 <select id='restrictions' multiple></select></label>
 <button id='add' class="btn-primary">Add</button> 
 <script>
@@ -27,7 +27,7 @@ $(document).ready(function() {
 
 	$.ajax({
 		
-		url:"http://localhost:8080/mydb/rest/test/getPreferences",
+		url:"http://localhost:8080/mydb/rest/getPreferences",
 		type:"get",
 		success: function(response) {
 			var stringResponse = JSON.stringify(response);
@@ -44,7 +44,7 @@ $(document).ready(function() {
 	
 	$.ajax({
 		
-		url:"http://localhost:8080/mydb/rest/test/getRestrictions",
+		url:"http://localhost:8080/mydb/rest/getRestrictions",
 		type:"get",
 		success: function(response) {
 			var stringResponse = JSON.stringify(response);
@@ -88,7 +88,7 @@ console.log(newUser);
 
 
 	$.ajax({
-		url:"http://localhost:8080/mydb/rest/test/createUser",
+		url:"http://localhost:8080/mydb/rest/createUser",
 		type:"post",
 		data:JSON.stringify(newUser),
 		dataType:"json",

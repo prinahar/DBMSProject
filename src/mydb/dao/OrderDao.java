@@ -131,12 +131,12 @@ public class OrderDao {
 		// " test weeklyrecipe field of order");
 		// System.out.println(u.getOrders().get(0).getWeeklyRecipe().getRecipe().getDescription());
 		// System.out.println(order.getWeeklyRecipe().getOrders().get(0));
-		Date d = new Date();
-		d.setDate(02);
-		d.setMonth(11);
-		d.setYear(2014);
+//		Date d = new Date();
+//		d.setDate(02);
+//		d.setMonth(11);
+//		d.setYear(2014);
 		
-		System.out.println(odao.findAllOrders(d));
+		//System.out.println(odao.findAllOrders(d));
 
 	}
 
