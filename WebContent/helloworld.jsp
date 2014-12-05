@@ -6,15 +6,24 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Insert title here</title>
 <script type="text/javascript" src="js/jquery.js"></script>
+<link href="css/bootstrap.css" rel="stylesheet"/>
 </head>
 <body>
-<label> UserName:<input id='username' type='text' /></label><br />
+
+<div class="container">
+<h1 id='here'> Bon Appetit!</h1>
+<input id="username" placeholder="Username" class="form-control"/>
+<input id="fname" placeholder="First Name"  class="form-control"/>
+<input id="lname" placeholder="Last Name" class="form-control"/>
+<input id="pass" placeholder="Password" class="form-control"/>
+
+<!-- <label> UserName:<input id='username' type='text' /></label><br />
 <label> First Name:<input id='fname' type='text' /></label><br />
 <label> Last Name:<input id='lname' type='text' /></label><br />
-<label> Password:<input id='pass' type='text' /></label><br />
+<label> Password:<input id='pass' type='text' /></label><br /> -->
 <label> Cuisine Preferences
 <select id='cuisine' multiple></select></label>
-<button id='add' >add</button>
+<button id='add' class="btn-primary">Add</button>
 <script>
 
 
@@ -22,7 +31,7 @@ $(document).ready(function() {
 
 	$.ajax({
 		
-		url:"http://localhost:8080/mydb/rest/test/get/cuisines",
+		url:"http://localhost:8080/mydb/rest/test/getPreferences",
 		type:"get",
 		success: function(response) {
 			var stringResponse = JSON.stringify(response);
@@ -37,10 +46,6 @@ $(document).ready(function() {
 		}
 	});
 });
-
-
-
-
 
 $("#add").click( function() {
 
@@ -68,8 +73,6 @@ alert(newUser);
 
 });
 </script>
-<h1 id='here'>
-hello world
-</h1>
+</div>
 </body>
 </html>

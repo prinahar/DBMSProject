@@ -34,7 +34,7 @@ public class Rest {
 	
 	@GET
 	@Path("/getAllUsers")
-	@Produces("/application/json")
+	@Produces("application/json")
 	public List<User> getAllUsers() {
 		List<User> lu = udao.findAllUsers();
 		return lu;
@@ -85,7 +85,7 @@ public class Rest {
 
 	@GET
 	@Path("/getWeeklyRecipeByDate/{date}")
-	@Produces("/application/json")
+	@Produces("application/json")
 	public List<WeeklyRecipe> getWeeklyRecipe(@PathParam("date") Date date) {
 		List<WeeklyRecipe> lr = wrdao.findWeeklyRecipeByDate(date);
 		return lr;
