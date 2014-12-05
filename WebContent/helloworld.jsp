@@ -12,20 +12,14 @@
 
 <div class="container">
 <h1 id='here'> Bon Appetit!</h1>
-<input id="username" placeholder="Username" class="form-control"/>
-<input id="fname" placeholder="First Name"  class="form-control"/>
-<input id="lname" placeholder="Last Name" class="form-control"/>
-<input id="pass" placeholder="Password" class="form-control"/>
-
-<!-- <label> UserName:<input id='username' type='text' /></label><br />
-<label> First Name:<input id='fname' type='text' /></label><br />
-<label> Last Name:<input id='lname' type='text' /></label><br />
-<label> Password:<input id='pass' type='text' /></label><br /> -->
-<label> Cuisine Preferences
+<p><input id="username" placeholder="Username" class="form-control"/></p>
+<p><input id="fname" placeholder="First Name"  class="form-control"/></p>
+<p><input id="lname" placeholder="Last Name" class="form-control"/></p>
+<p><input id="pass" placeholder="Password" class="form-control"/></p>
+<p> <label> Cuisine Preferences </p>
 <select id='cuisine' multiple></select></label>
-<button id='add' class="btn-primary">Add</button>
+<button id='add' class="btn-primary">Add</button> 
 <script>
-
 
 $(document).ready(function() {
 
