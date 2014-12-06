@@ -41,7 +41,7 @@ public class Recipe implements Serializable {
 			@JoinColumn(name="ingredientName")
 			}
 		)
-	@JsonIgnore
+	
 	private List<Ingredient> ingredients;
 
 	//bi-directional many-to-one association to Cuisine

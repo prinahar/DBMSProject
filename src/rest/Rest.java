@@ -1,5 +1,6 @@
 package rest;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -121,6 +122,13 @@ public class Rest {
 		return ll;
 	}
 	@GET
+	@Path("/getRecipe/{id}")
+	@Produces("application/json")
+	public Recipe getRecipe(@PathParam ("id") int id) {
+		Recipe r = recipeDao.findRecipeById(id);
+		return r;
+	}
+	@GET
 	@Path("/getAllTypes")
 	@Produces("application/json")
 	public List<Type> getAllTypes() {
@@ -143,15 +151,21 @@ public class Rest {
 	@POST
 	@Consumes("application/json")
 	@Produces("application/json")
-	public String addRecipe(Recipe r) {
+	public int addRecipe(Recipe r) {
+		System.out.println("executed");
+		System.out.println(r.getIngredients());
 		List<Ingredient> realIngredients = new LinkedList<Ingredient>();
 		for(Ingredient iter: r.getIngredients()){
+			System.out.println(iter.getIngredientName());
+			System.out.println(iter);
 			Ingredient i = idao.findIngredient(iter.getIngredientName());
+			
 			realIngredients.add(i);
+			System.out.println(realIngredients);
 		}
 		Cuisine c = cdao.findCuisineByName(r.getCuisine().getCuisineName());
-		recipeDao.addRecipe(r.getDescription(), realIngredients, c);
-		return "recipe successfully created!";
+		int id = recipeDao.addRecipe(r.getDescription(), realIngredients, c).getRecipeId();
+		return id;
 	}
 	
 	@GET
@@ -214,8 +228,17 @@ public class Rest {
 	}
 	
 	public static void main(String[] args) {
-//		Rest r = new Rest();
-
+//		Rest rest = new Rest();
+//		IngredientDao idao = new IngredientDao();
+//		RecipeDao rdao = new RecipeDao();
+//		List<Ingredient> li = new ArrayList();
+//		li.add( idao.findIngredient("chicken"));
+//		li.add(idao.findIngredient("butter"));
+//		CuisineDao cdao = new CuisineDao();
+//		Cuisine c = cdao.findCuisineByName("Chinese");
+//		Recipe r = new Recipe(null, null, null, li ,c , null, null , null);
+//		rest.addRecipe(r);
+//		System.out.println(r);
 	}
 
 }

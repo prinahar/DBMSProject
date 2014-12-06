@@ -9,29 +9,35 @@
 
 <body>
 <div class = "container">
-<h1 id='here'> //Recipe// </h1>
+<h1 id='recipeTitle'> //Recipe// </h1>
 <p> Picture </p>
 <p> Rating </p>
-<label>
+<label> Select Cuisine
 <select id='cuisine'></select>
-
-<button id='addCuisine' class="btn-primary">Add Cuisine</button>
-<p>
-<select id='ingredient' multiple></select>
-</p>
 </label>
+<p>
+<label> Select Ingredients
+<select id='ingredient' multiple></select></label>
+</p>
 <br />
 <br />
+<input type='text' id='addRecipeName' />
+<p> <button id='addRecipe' class="btn-primary">Add Recipe</button> </p><br />
 <input type='text' id='newIngredient' />
 <select id='type'></select>
-<p> <button id='addIngredient' class="btn-primary">Add Ingredient</button> </p>
-<input type='text' id='addRecipeName' />
-<p> <button id='addRecipe' class="btn-primary">Add Recipe</button> </p>
+ <button id='addIngredient' class="btn-primary">Add New Ingredient</button> 
+
 
 
 <p> <button id='order' class="btn-primary">Add to Order</button> </p>
 <script>
 /* $("#Type").click( function() { */
+function getParameterByName(name) {
+    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+        results = regex.exec(location.search);
+    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+}
 
 
 $(document).ready(function() {
@@ -59,7 +65,7 @@ $(document).ready(function() {
 		success: function(response) {
 			
 			$.each(response, function(key, value)  {
-				$("#ingredient").append("<option value='ingredient'>" + value.ingredientName + "</option>");
+				$("#ingredient").append("<option value='" + value.typeBean.type + "'>" + value.ingredientName + "</option>");
 			});
 			
 		}
@@ -78,6 +84,18 @@ $(document).ready(function() {
 		}
 	}); 
  	
+ 	if(getParameterByName("recipeId") != null && getParameterByName("recipeId") != "") {
+		$.ajax({
+			
+			url:"http://localhost:8080/mydb/rest/getRecipe/" + getParameterByName("recipeId"),
+			type:"get",
+			success: function(response) {
+				console.log(response.description);
+				$("#recipeTitle").html(response.description);
+				
+			}
+		}); 
+ 	}
  	$("#addIngredient").click( function() {
  	 	var newIngredient = {ingredientName: $("#newIngredient").val(), typeBean: $("#type > option:selected").text()};
  	 	console.log(newIngredient);
@@ -91,7 +109,7 @@ $(document).ready(function() {
  			success: function(response) {
  				$("#ingredient").empty();
  				$.each(response, function(key, value)  {
- 					$("#ingredient").append("<option value='ingredient'>" + value.ingredientName + "</option>");
+ 					$("#ingredient").append("<option value='" + value.typeBean.type + "'>" + value.ingredientName + "</option>");
  				});
  			}
  		});
@@ -100,10 +118,13 @@ $(document).ready(function() {
  	$("#addRecipe").click( function() {
  		var prefIngredients = $("#ingredient > option:selected");
  		var ingredients = [];
- 		for(var i = 0; i < prefIngredients.length; i++)
- 			ingredients.push({ingredientName: prefIngredients[i].innerHTML});
- 		var cuisine = $("#cuisine > option:selected"); 		
- 	 	var newRecipe = {description:$("#addRecipeName").val(), "ingredients":ingredients , "cuisine":{cuisineName: "American"}};
+ 		for(var i = 0; i < prefIngredients.length; i++) {
+ 			var typetext = prefIngredients[i].value;
+ 		    var igredName = prefIngredients[i].innerHTML;
+ 			ingredients.push({'ingredientName': igredName, 'typeBean':{'type':typetext}});
+ 		}
+ 		var cuisine = $("#cuisine > option:selected").text(); 		
+ 	 	var newRecipe = {description:$("#addRecipeName").val(), "ingredients":ingredients , "cuisine":{cuisineName: cuisine}};
  	 	console.log(newRecipe);
  	 	
  	 	$.ajax({
@@ -113,33 +134,12 @@ $(document).ready(function() {
  			dataType:"json",
  			contentType:"application/json",
  			success: function(response) {
- 				alert(response);
+ 				window.location.assign("recipe.html?recipeId="+response);
  			}
  		});
  	});
 
- 	
 });
-
- 	
-
-
-
-
-// $("#Add Cuisine").click( function() {
-// 	var cuisine = $("#cuisine").val();
-	
-// }
-
-// $("#Add Type").click( function() {
-	
-// }
-// $("#Add Ingredient").click( function() {
-	
-// }
-// $("#Add to Order").click( function() {
-	
-// }
 
 </script>
 

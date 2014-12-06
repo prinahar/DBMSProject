@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 import javax.persistence.*;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import java.util.List;
 
 
@@ -30,6 +32,7 @@ public class Ingredient implements Serializable {
 			@JoinColumn(name="recipeId")
 			}
 		)
+	@JsonIgnore
 	private List<Recipe> recipes;
 
 	//bi-directional many-to-one association to Type

@@ -1,5 +1,6 @@
 package mydb.dao;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -68,6 +69,16 @@ public class RecipeDao {
 		em.getTransaction().commit();
 	}
 	public static void main(String[] args) {
+		IngredientDao idao = new IngredientDao();
+	RecipeDao rdao = new RecipeDao();
+	List<Ingredient> li = new ArrayList();
+	li.add( idao.findIngredient("chicken"));
+	li.add(idao.findIngredient("butter"));
+	CuisineDao cdao = new CuisineDao();
+	Cuisine c = cdao.findCuisineByName("Chinese");
+	Recipe r = new Recipe(null, null, null, li ,c , null, null , null);
+	rdao.addRecipe(r);
+	System.out.println(r);
 		// TODO Auto-generated method stub
 		//Recipe r = new Recipe(1,"good steak", null, "12345", null, null, null, null, null);
 //		IngredientDao idao = new IngredientDao();
