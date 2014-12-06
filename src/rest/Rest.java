@@ -12,17 +12,23 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 
+import mydb.dao.Chef;
+import mydb.dao.ChefDao;
 import mydb.dao.Cuisine;
 import mydb.dao.CuisineDao;
+import mydb.dao.Ingredient;
+import mydb.dao.IngredientDao;
 import mydb.dao.Payment;
 import mydb.dao.Person;
 import mydb.dao.PersonDao;
 import mydb.dao.Restriction;
 import mydb.dao.RestrictionDao;
+import mydb.dao.TypeDao;
 import mydb.dao.User;
 import mydb.dao.UserDao;
 import mydb.dao.WeeklyRecipe;
 import mydb.dao.WeeklyRecipeDao;
+import mydb.dao.Type;
 
 @Path("")
 public class Rest {
@@ -32,6 +38,9 @@ public class Rest {
 	RestrictionDao rdao = new RestrictionDao();
 	CuisineDao cdao = new CuisineDao();
 	WeeklyRecipeDao wrdao = new WeeklyRecipeDao();
+	IngredientDao idao = new IngredientDao();
+	ChefDao chefDao = new ChefDao();
+	TypeDao tdao = new TypeDao();
 	
 	@GET
 	@Path("/getAllUsers")
@@ -41,6 +50,7 @@ public class Rest {
 		return lu;
 		
 	}
+
 	
 	@GET
 	@Path("/login")
@@ -101,9 +111,43 @@ public class Rest {
 	}
 
 	@GET
+	@Path("/getAllIngredents")
+	@Produces("application/json")
+	public List<Ingredient> getAllIngredients() {
+		List<Ingredient> ll = idao.findAllIngredients();
+		return ll;
+	}
+	
+	@Path("/addIngredient")
+	@POST
+	@Consumes("application/json")
+	@Produces("application/json")
+	public List<Ingredient> addIngredient(Ingredient i) {
+		Type t = tdao.findType(i.getTypeBean().getType());
+		idao.createIngredientByType(i.getIngredientName(), t);
+		List<Ingredient> li = idao.findAllIngredients();
+		return li;
+	}
+	
+	
+	
+	@GET
+	@Path("/isChef")
+	@Produces("application/json")
+	public String isChef(@PathParam("date") String username) {
+		ChefDao cdao = new ChefDao();
+		Chef c = cdao.findChefByName(username);
+		if(c == null){
+			return "false";
+		}
+		return "true";
+	}
+	
+	@GET
 	@Path("/getWeeklyRecipeByDate/{date}")
 	@Produces("application/json")
-	public List<WeeklyRecipe> getWeeklyRecipe(@PathParam("date") Date date) {
+	public List<WeeklyRecipe> getWeeklyRecipe(@PathParam("date") long dateForm) {
+		Date date = new Date(dateForm);
 		List<WeeklyRecipe> lr = wrdao.findWeeklyRecipeByDate(date);
 		return lr;
 	}

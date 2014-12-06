@@ -18,8 +18,6 @@
 <p><input id="pass" placeholder="Password" class="form-control"/></p>
 <p> <label> Cuisine Preferences </p>
 <select id='cuisine' multiple></select></label>
-<p> <label> Restrictions </p>
-<select id='restrictions' multiple></select></label>
 <button id='add' class="btn-primary">Add</button> 
 <script>
 
@@ -27,7 +25,7 @@ $(document).ready(function() {
 
 	$.ajax({
 		
-		url:"http://localhost:8080/mydb/rest/getPreferences",
+		url:"http://localhost:8080/mydb/rest/test/getPreferences",
 		type:"get",
 		success: function(response) {
 			var stringResponse = JSON.stringify(response);
@@ -36,29 +34,11 @@ $(document).ready(function() {
 			$.each(response, function(key, value)  {
 				console.log(key);
 				console.log(value);
-				$("#cuisine").append("<option value='cuisineName'>" + value.cuisineName + "</option>");
+				$("#cuisine").append("<option>" + value.cuisineName + "</option>");
 			});
 			
 		}
 	});
-	
-	$.ajax({
-		
-		url:"http://localhost:8080/mydb/rest/getRestrictions",
-		type:"get",
-		success: function(response) {
-			var stringResponse = JSON.stringify(response);
-			console.log(stringResponse);
-			
-			$.each(response, function(key, value)  {
-				console.log(key);
-				console.log(value);
-				$("#restrictions").append("<option value='restriction'>" + value.restriction + "</option>");
-			});
-			
-		}
-	});
-	
 });
 
 $("#add").click( function() {
@@ -67,28 +47,13 @@ var username = $("#username").val();
 var fname = $("#fname").val();
 var lname = $("#lname").val();
 var pass = $("#pass").val();
-var prefs = [];
-var prefSelections = $("#cuisine > option:selected");
-var restrictions = [];
-var prefRestrictions = $("#restrictions > option:selected");
 
-
-for( var i = 0; i < prefSelections.length; i++) {
-	prefs.push({cuisineName:prefSelections[i].innerHTML});
-}
-
-for( var i = 0; i < prefRestrictions.length; i++) {
-	restrictions.push({restriction:prefRestrictions[i].innerHTML});
-}
-
-//alert(JSON.stringify(prefs));
-
-var newUser = {"userName":username,"cuisines":prefs,"orders":null,"payment":null,"restrictions":restrictions,"person":{"userName":username,"dtype":"user","firstName":fname,"lastName":lname,"password":pass}};
-console.log(newUser);
+var newUser = {"userName":username,"cuisines":null,"orders":null,"payment":null,"restrictions":null,"person":{"userName":username,"dtype":"user","firstName":fname,"lastName":lname,"password":pass}};
+alert(newUser);
 
 
 	$.ajax({
-		url:"http://localhost:8080/mydb/rest/createUser",
+		url:"http://localhost:8080/mydb/rest/test/createUser",
 		type:"post",
 		data:JSON.stringify(newUser),
 		dataType:"json",

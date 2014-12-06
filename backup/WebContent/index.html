@@ -21,26 +21,31 @@ $("#login").click( function() {
 var username = $("#username").val();
 var pass = $("#pass").val();
 
+var newUser = {"userName":username,"cuisines":null,"orders":null,"payment":null,"restrictions":null,"person":{"userName":username,"dtype":"user","firstName":fname,"lastName":lname,"password":pass}};
+alert(newUser);
+
 
 	$.ajax({
-		url:"http://localhost:8080/mydb/rest/login?id="+username+"%26"+pass,
+		url:"http://localhost:8080/mydb/rest/login?id="+username+"%26"+"pass="+pass,
 		type:"get",
+		data:JSON.stringify(newUser),
+		dataType:"json",
 		contentType:"application/json",
 		success: function(response) {
 			var stringResponse = JSON.stringify(response);
-			if(stringResponse === "false"){
+			if(stringResponse === "false")
 				alert("false");
-			}
-			else{
-				var url = "http://localhost:8080/mydb/usercontrol.html?username="+username;
-				window.location.replace(url);	
-			}
+			else
+				alert("true");
 		}
 	});
 
 
 });
 </script>
+
 </div>
+
+
 </body>
 </html>

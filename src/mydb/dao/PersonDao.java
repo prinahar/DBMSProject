@@ -40,9 +40,9 @@ public class PersonDao {
 	}
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		Person p = new Person("Charly", "Chef", "aa", "bb", "999", null, null);
-		PersonDao pdao = new PersonDao();
-		pdao.addPerson(p);
+//		Person p = new Person("Charly", "Chef", "aa", "bb", "999", null, null);
+//		PersonDao pdao = new PersonDao();
+//		pdao.addPerson(p);
 		
 	}
 

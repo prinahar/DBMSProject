@@ -6,11 +6,12 @@ package mydb.dao;
 
 
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
-
 import javax.persistence.EntityManagerFactory;
-
 import javax.persistence.Persistence;
+import javax.persistence.Query;
 
 
 
@@ -96,6 +97,13 @@ public class IngredientDao
 
    }
 
+   public List<Ingredient> findAllIngredients() {
+		em.getTransaction().begin();
+		Query q = em.createQuery("Select i from Ingredient i");
+		List<Ingredient> ll = (List<Ingredient>) q.getResultList();
+		em.getTransaction().commit();
+		return ll;
+	}
 
 
    public static void main(String[] args)
