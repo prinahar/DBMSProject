@@ -1,8 +1,11 @@
 package mydb.dao;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.persistence.Query;
 
 public class TypeDao {
 	EntityManagerFactory factory = Persistence.createEntityManagerFactory("mydb");
@@ -24,7 +27,13 @@ public class TypeDao {
 		em.getTransaction().commit();
 		return t;
 	}
-	
+	public List<Type> findAllTypes() {
+		em.getTransaction().begin();
+		Query q = em.createQuery("Select i from Type i");
+		List<Type> ll = (List<Type>) q.getResultList();
+		em.getTransaction().commit();
+		return ll;
+	}
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		//Type t = new Type("meet");

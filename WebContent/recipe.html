@@ -1,20 +1,34 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<title>Home Page</title>
+<script type="text/javascript" src="js/jquery.js"></script>
+<link href="css/bootstrap.css" rel="stylesheet"/>
 </head>
+
 <body>
+<div class = "container">
 <h1 id='here'> //Recipe// </h1>
 <p> Picture </p>
 <p> Rating </p>
+<label>
+<select id='cuisine'></select>
 
-<select id='cuisine'></select></label>
-<p> <button id='cuisine' class="btn-primary">Add Cuisine</button> </p>
-<select id='ingredient' multiple></select></label>
-<p> <button id='ingredient' class="btn-primary">Add Ingredient</button> </p>
-<select id='type'></select></label>
-<p> <button id='type' class="btn-primary">Add Type</button> </p>
+<button id='addCuisine' class="btn-primary">Add Cuisine</button>
+<p>
+<select id='ingredient' multiple></select>
+</p>
+</label>
+<br />
+<br />
+<input type='text' id='newIngredient' />
+<select id='type'></select>
+<p> <button id='addIngredient' class="btn-primary">Add Ingredient</button> </p>
+<input type='text' id='addRecipeName' />
+<p> <button id='addRecipe' class="btn-primary">Add Recipe</button> </p>
+
+
 <p> <button id='order' class="btn-primary">Add to Order</button> </p>
 <script>
 /* $("#Type").click( function() { */
@@ -28,12 +42,9 @@ $(document).ready(function() {
 		url:"http://localhost:8080/mydb/rest/getPreferences",
 		type:"get",
 		success: function(response) {
-			var stringResponse = JSON.stringify(response);
-			console.log(stringResponse);
 			
 			$.each(response, function(key, value)  {
-				console.log(key);
-				console.log(value);
+				$("#cuisine").append("<option value='preference'>" + value.cuisineName + "</option>");
 			});
 			
 		}
@@ -42,60 +53,98 @@ $(document).ready(function() {
 	
 	$.ajax({
 
-		url:"http://localhost:8080/mydb/rest/getAllIngredients"
+		url:"http://localhost:8080/mydb/rest/getAllIngredients",
 		type:"get",
 		contentType:"application/json",
 		success: function(response) {
-			var stringResponse = JSON.stringify(response);
-			console.log(stringResponse);
 			
 			$.each(response, function(key, value)  {
-				console.log(key);
-				console.log(value);
 				$("#ingredient").append("<option value='ingredient'>" + value.ingredientName + "</option>");
 			});
 			
 		}
 	});
 	
-/* 	$.ajax({
+ 	$.ajax({
 		
 		url:"http://localhost:8080/mydb/rest/getAllTypes",
 		type:"get",
 		success: function(response) {
-			var stringResponse = JSON.stringify(response);
-			console.log(stringResponse);
 			
 			$.each(response, function(key, value)  {
-				console.log(key);
-				console.log(value);
 				$("#type").append("<option value='type'>" + value.type + "</option>");
 			});
 			
 		}
-	}); */
-	
-}
+	}); 
+ 	
+ 	$("#addIngredient").click( function() {
+ 	 	var newIngredient = {ingredientName: $("#newIngredient").val(), typeBean: $("#type > option:selected").text()};
+ 	 	console.log(newIngredient);
+ 	 	
+ 	 	$.ajax({
+ 			url:"http://localhost:8080/mydb/rest/addIngredient",
+ 			type:"post",
+ 			data:JSON.stringify(newIngredient),
+ 			dataType:"json",
+ 			contentType:"application/json",
+ 			success: function(response) {
+ 				$("#ingredient").empty();
+ 				$.each(response, function(key, value)  {
+ 					$("#ingredient").append("<option value='ingredient'>" + value.ingredientName + "</option>");
+ 				});
+ 			}
+ 		});
+ 	});
+ 	
+ 	$("#addRecipe").click( function() {
+ 		var prefIngredients = $("#ingredient > option:selected");
+ 		var ingredients = [];
+ 		for(var i = 0; i < prefIngredients.length; i++)
+ 			ingredients.push({ingredientName: prefIngredients[i].innerHTML});
+ 		var cuisine = $("#cuisine > option:selected"); 		
+ 	 	var newRecipe = {description:$("#addRecipeName").val(), "ingredients":ingredients , "cuisine":{cuisineName: "American"}};
+ 	 	console.log(newRecipe);
+ 	 	
+ 	 	$.ajax({
+ 			url:"http://localhost:8080/mydb/rest/addRecipe",
+ 			type:"post",
+ 			data:JSON.stringify(newRecipe),
+ 			dataType:"json",
+ 			contentType:"application/json",
+ 			success: function(response) {
+ 				alert(response);
+ 			}
+ 		});
+ 	});
 
-$("#Add Cuisine").click( function() {
-	var cuisine = $("#cuisine").val();
-	
-}
+ 	
+});
 
-$("#Add Type").click( function() {
+ 	
+
+
+
+
+// $("#Add Cuisine").click( function() {
+// 	var cuisine = $("#cuisine").val();
 	
-}
-$("#Add Ingredient").click( function() {
+// }
+
+// $("#Add Type").click( function() {
 	
-}
-$("#Add to Order").click( function() {
+// }
+// $("#Add Ingredient").click( function() {
 	
-}
+// }
+// $("#Add to Order").click( function() {
+	
+// }
 
 </script>
+
 </div>
-</body>
-</html>
+
 
 </body>
 </html>

@@ -1,7 +1,11 @@
 package mydb.dao;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
+
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import java.util.List;
 
 
@@ -19,6 +23,7 @@ public class Type implements Serializable {
 
 	//bi-directional many-to-one association to Ingredient
 	@OneToMany(mappedBy="typeBean")
+	@JsonIgnore
 	private List<Ingredient> ingredients;
 
 	//bi-directional many-to-many association to Restriction
@@ -32,6 +37,7 @@ public class Type implements Serializable {
 			@JoinColumn(name="restriction")
 			}
 		)
+	@JsonIgnore
 	private List<Restriction> restrictions;
 
 	public Type() {

@@ -21,6 +21,8 @@ import mydb.dao.IngredientDao;
 import mydb.dao.Payment;
 import mydb.dao.Person;
 import mydb.dao.PersonDao;
+import mydb.dao.Recipe;
+import mydb.dao.RecipeDao;
 import mydb.dao.Restriction;
 import mydb.dao.RestrictionDao;
 import mydb.dao.TypeDao;
@@ -41,6 +43,7 @@ public class Rest {
 	IngredientDao idao = new IngredientDao();
 	ChefDao chefDao = new ChefDao();
 	TypeDao tdao = new TypeDao();
+	RecipeDao recipeDao = new RecipeDao();
 	
 	@GET
 	@Path("/getAllUsers")
@@ -111,11 +114,18 @@ public class Rest {
 	}
 
 	@GET
-	@Path("/getAllIngredents")
+	@Path("/getAllIngredients")
 	@Produces("application/json")
 	public List<Ingredient> getAllIngredients() {
 		List<Ingredient> ll = idao.findAllIngredients();
 		return ll;
+	}
+	@GET
+	@Path("/getAllTypes")
+	@Produces("application/json")
+	public List<Type> getAllTypes() {
+		List<Type> lt = tdao.findAllTypes();
+		return lt;
 	}
 	
 	@Path("/addIngredient")
@@ -129,7 +139,20 @@ public class Rest {
 		return li;
 	}
 	
-	
+	@Path("/addRecipe")
+	@POST
+	@Consumes("application/json")
+	@Produces("application/json")
+	public String addRecipe(Recipe r) {
+		List<Ingredient> realIngredients = new LinkedList<Ingredient>();
+		for(Ingredient iter: r.getIngredients()){
+			Ingredient i = idao.findIngredient(iter.getIngredientName());
+			realIngredients.add(i);
+		}
+		Cuisine c = cdao.findCuisineByName(r.getCuisine().getCuisineName());
+		recipeDao.addRecipe(r.getDescription(), realIngredients, c);
+		return "recipe successfully created!";
+	}
 	
 	@GET
 	@Path("/isChef")
