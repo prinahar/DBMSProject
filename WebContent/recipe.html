@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<h1 id='here'> //Recipe// </h1>
+<p> Picture </p>
+<p> Rating </p>
+
+<select id='cuisine'></select></label>
+<p> <button id='cuisine' class="btn-primary">Add Cuisine</button> </p>
+<select id='ingredient' multiple></select></label>
+<p> <button id='ingredient' class="btn-primary">Add Ingredient</button> </p>
+<select id='type'></select></label>
+<p> <button id='type' class="btn-primary">Add Type</button> </p>
+<p> <button id='order' class="btn-primary">Add to Order</button> </p>
+<script>
+/* $("#Type").click( function() { */
+
+
+$(document).ready(function() {
+	
+
+	$.ajax({
+		
+		url:"http://localhost:8080/mydb/rest/getPreferences",
+		type:"get",
+		success: function(response) {
+			var stringResponse = JSON.stringify(response);
+			console.log(stringResponse);
+			
+			$.each(response, function(key, value)  {
+				console.log(key);
+				console.log(value);
+			});
+			
+		}
+	});
+
+	
+	$.ajax({
+
+		url:"http://localhost:8080/mydb/rest/getAllIngredients"
+		type:"get",
+		contentType:"application/json",
+		success: function(response) {
+			var stringResponse = JSON.stringify(response);
+			console.log(stringResponse);
+			
+			$.each(response, function(key, value)  {
+				console.log(key);
+				console.log(value);
+				$("#ingredient").append("<option value='ingredient'>" + value.ingredientName + "</option>");
+			});
+			
+		}
+	});
+	
+/* 	$.ajax({
+		
+		url:"http://localhost:8080/mydb/rest/getAllTypes",
+		type:"get",
+		success: function(response) {
+			var stringResponse = JSON.stringify(response);
+			console.log(stringResponse);
+			
+			$.each(response, function(key, value)  {
+				console.log(key);
+				console.log(value);
+				$("#type").append("<option value='type'>" + value.type + "</option>");
+			});
+			
+		}
+	}); */
+	
+}
+
+$("#Add Cuisine").click( function() {
+	var cuisine = $("#cuisine").val();
+	
+}
+
+$("#Add Type").click( function() {
+	
+}
+$("#Add Ingredient").click( function() {
+	
+}
+$("#Add to Order").click( function() {
+	
+}
+
+</script>
+</div>
+</body>
+</html>
+
+</body>
+</html>

@@ -1,38 +1,23 @@
 package mydb.dao;
 
-
-
-
-
-
-
 import java.util.List;
+import javax.persistence.EntityManager;
+
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 
-
-
 public class IngredientDao
-
 {
-
    EntityManagerFactory factory = Persistence
-
          .createEntityManagerFactory("mydb");
-
    EntityManager em = null;
-
-
-
+   
    public IngredientDao()
-
    {
-
       em = factory.createEntityManager();
-
    }
 
    //Input: the type that is already in database and ingredient name
@@ -46,27 +31,17 @@ public class IngredientDao
       em.persist(ingredient);
       em.getTransaction().commit();
    }
-
    public Ingredient findIngredient(String ingredientName){
-
       em.getTransaction().begin();
-
       Ingredient ingredient = em.find(Ingredient.class, ingredientName);
-
       em.getTransaction().commit();
-
       return ingredient;
-
    }
-
+   
    public void updateIngredientByName (Ingredient ingredient, String ingredientName) {
-
       em.getTransaction().begin();
-
       ingredient.setIngredientName(ingredientName);
-
       em.merge(ingredient);
-
       em.getTransaction().commit();
 
    }

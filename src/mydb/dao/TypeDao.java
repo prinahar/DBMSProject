@@ -11,7 +11,7 @@ public class TypeDao {
 	public TypeDao(){
 		em = factory.createEntityManager();
 	}
-	public Type AddType(String typeName){
+	public Type addType(String typeName){
 		em.getTransaction().begin();
 		Type t = new Type(typeName);
 		em.persist(t);
