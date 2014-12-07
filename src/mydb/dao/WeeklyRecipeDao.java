@@ -2,6 +2,7 @@ package mydb.dao;
 
 
 
+import java.util.Calendar;
 import java.util.Date;
 
 
@@ -55,10 +56,17 @@ public class WeeklyRecipeDao
       em.getTransaction().commit();
       return weeklyRecipe;
    }
-   public List<WeeklyRecipe> findWeeklyRecipeByDate(Date week) {
-	   em.getTransaction().begin();
-	   Query q = em.createQuery("select w from WeeklyRecipe w where w.week = :week");
-	   q.setParameter("week", week);
+   
+@SuppressWarnings("deprecation")
+public List<WeeklyRecipe> findWeeklyRecipeByDate(Date date) {
+	   Date e = (Date) date.clone();
+	   Calendar rightNow = Calendar.getInstance();
+	   date.setDate(rightNow.getFirstDayOfWeek());
+	   e.setDate(rightNow.getFirstDayOfWeek() + 6);
+	   em.getTransaction().begin();	   
+	   Query q = em.createQuery("select w from WeeklyRecipe w where w.week between :dateDStart and :dateDEnd");
+	   q.setParameter("dateDStart", date);
+	   q.setParameter("dateDEnd", e);
 	   List<WeeklyRecipe> lw = (List<WeeklyRecipe>) q.getResultList();
 	   em.getTransaction().commit();
 	   return lw;
@@ -89,21 +97,33 @@ public class WeeklyRecipeDao
 
 
 
-   public static void main(String[] args)
 
-   {
+@SuppressWarnings("deprecation")
+public static void main(String[] args)
 
-      // TODO Auto-generated method stub
-	   RecipeDao rdao = new RecipeDao();
-//	   Recipe r2= rdao.findRecipeById(1);
-	   Recipe r = rdao.findRecipeByName("fishRose");
-//	   rdao.addRecipe(r);
-	   WeeklyRecipeDao wrDao = new WeeklyRecipeDao();
-	   //WeeklyRecipe wr = wrDao.createWeeklyRecipe(r, new Date());
-	   List<WeeklyRecipe> wr = wrDao.findWeeklyRecipeByDate(new Date());
-	   for(WeeklyRecipe iter: wr)
-		   System.out.println(iter.getRecipe().getDescription());
-	   //System.out.println(wr.getRecipe().getWeeklyRecipes().get(0).getWeek());
+   { 	   
+	Date d = new Date();
+	WeeklyRecipeDao wrDao = new WeeklyRecipeDao();
+	System.out.println(wrDao.findWeeklyRecipeByDate(d));
+//	   Calendar rightNow = Calendar.getInstance();
+//   System.out.println(rightNow.getFirstDayOfWeek());
+//   Date d = new Date();
+//   d.setDate(rightNow.getFirstDayOfWeek());
+//   System.out.println(d.toString());
+//   System.out.println("ttt");
+   
+
+//      // TODO Auto-generated method stub
+//	   RecipeDao rdao = new RecipeDao();
+////	   Recipe r2= rdao.findRecipeById(1);
+//	   Recipe r = rdao.findRecipeByName("fishRose");
+////	   rdao.addRecipe(r);
+//	   WeeklyRecipeDao wrDao = new WeeklyRecipeDao();
+//	   //WeeklyRecipe wr = wrDao.createWeeklyRecipe(r, new Date());
+//	   List<WeeklyRecipe> wr = wrDao.findWeeklyRecipeByDate(new Date());
+//	   for(WeeklyRecipe iter: wr)
+//		   System.out.println(iter.getRecipe().getDescription());
+//	   //System.out.println(wr.getRecipe().getWeeklyRecipes().get(0).getWeek());
 
    }
 

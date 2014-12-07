@@ -1,5 +1,6 @@
 package rest;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
@@ -181,10 +182,10 @@ public class Rest {
 	}
 	
 	@GET
-	@Path("/getWeeklyRecipeByDate/{date}")
+	@Path("/getWeeklyRecipeByDate/")
 	@Produces("application/json")
-	public List<WeeklyRecipe> getWeeklyRecipe(@PathParam("date") long dateForm) {
-		Date date = new Date(dateForm);
+	public List<WeeklyRecipe> getWeeklyRecipe() {
+		Date date = new Date();
 		List<WeeklyRecipe> lr = wrdao.findWeeklyRecipeByDate(date);
 		return lr;
 	}
@@ -239,6 +240,9 @@ public class Rest {
 //		Recipe r = new Recipe(null, null, null, li ,c , null, null , null);
 //		rest.addRecipe(r);
 //		System.out.println(r);
+		
+
+		
 	}
 
 }

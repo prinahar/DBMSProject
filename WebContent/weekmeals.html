@@ -31,16 +31,9 @@ $(document).ready(function() {
     console.log("Username:" + $("#username").val());
     console.log("chef?:" + $("#chef").val());
     
-    
-    $("button").click( function() {
-        window.location.assign(this.id + ".html?username=" + $("#username").val());
-    });
-    
-    alert(Date.now());
-    
 	$.ajax({
 		
-		url:"http://localhost:8080/mydb/rest/getAllWeeklyRecipes/" + Date.now(),
+		url:"http://localhost:8080/mydb/rest/getWeeklyRecipes/",
 		type:"get",
 		success: function(response) {
 			var stringResponse = JSON.stringify(response);
