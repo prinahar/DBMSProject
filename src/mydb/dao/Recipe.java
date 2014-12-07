@@ -60,6 +60,7 @@ public class Recipe implements Serializable {
 
 	//bi-directional many-to-one association to WeeklyRecipe
 	@OneToMany(mappedBy="recipe")
+	@JsonIgnore
 	private List<WeeklyRecipe> weeklyRecipes;
 
 	public Recipe() {

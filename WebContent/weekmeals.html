@@ -33,7 +33,7 @@ $(document).ready(function() {
     
 	$.ajax({
 		
-		url:"http://localhost:8080/mydb/rest/getWeeklyRecipes/",
+		url:"http://localhost:8080/mydb/rest/getWeeklyRecipes",
 		type:"get",
 		success: function(response) {
 			var stringResponse = JSON.stringify(response);

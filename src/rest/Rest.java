@@ -182,7 +182,7 @@ public class Rest {
 	}
 	
 	@GET
-	@Path("/getWeeklyRecipeByDate/")
+	@Path("/getWeeklyRecipes")
 	@Produces("application/json")
 	public List<WeeklyRecipe> getWeeklyRecipe() {
 		Date date = new Date();

@@ -2,7 +2,11 @@
 package mydb.dao;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
+
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import java.util.Date;
 import java.util.List;
 
@@ -26,6 +30,8 @@ public class WeeklyRecipe implements Serializable {
 
 	//bi-directional many-to-one association to Order
 	@OneToMany(mappedBy="weeklyRecipe")
+	
+	@JsonIgnore
 	private List<Order> orders;
 
 	//bi-directional many-to-one association to Recipe
