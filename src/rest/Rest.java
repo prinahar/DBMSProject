@@ -114,6 +114,7 @@ public class Rest {
 		List<Cuisine> preference = u.getCuisines();
 		return preference;
 	}
+	
 
 	@GET
 	@Path("/getAllIngredients")
@@ -147,18 +148,13 @@ public class Rest {
 		List<Ingredient> li = idao.findAllIngredients();
 		return li;
 	}
-	
 	@Path("/addRecipe")
 	@POST
 	@Consumes("application/json")
 	@Produces("application/json")
 	public int addRecipe(Recipe r) {
-		System.out.println("executed");
-		System.out.println(r.getIngredients());
 		List<Ingredient> realIngredients = new LinkedList<Ingredient>();
 		for(Ingredient iter: r.getIngredients()){
-			System.out.println(iter.getIngredientName());
-			System.out.println(iter);
 			Ingredient i = idao.findIngredient(iter.getIngredientName());
 			
 			realIngredients.add(i);
@@ -167,6 +163,27 @@ public class Rest {
 		Cuisine c = cdao.findCuisineByName(r.getCuisine().getCuisineName());
 		int id = recipeDao.addRecipe(r.getDescription(), realIngredients, c).getRecipeId();
 		return id;
+	}
+	@Path("/addPreference")
+	@POST
+	@Consumes("application/json")
+	@Produces("application/json")
+	public void addPreference(Cuisine c , String username) {
+		User u = udao.findUserByName(username);
+		List<Cuisine> prefs = u.getCuisines();
+		prefs.add(c);
+		udao.updateCuisine(u, prefs); 
+	}
+	
+	@Path("/addRestriction")
+	@POST
+	@Consumes("application/json")
+	@Produces("application/json")
+	public void addRestriction(Restriction r , String username) {
+		User u = udao.findUserByName(username);
+		List<Restriction> lr = u.getRestrictions();
+		lr.add(r);
+		udao.updateRestriction(u, lr); 
 	}
 	
 	@GET
