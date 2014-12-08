@@ -6,12 +6,20 @@
 <script type="text/javascript" src="js/jquery.js"></script> 
 <!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> --> 
 <link href="css/bootstrap.css" rel="stylesheet"/>
+<style>
+.recipeSelect:hover {
+    cursor: pointer;
+    background-color: black;
+    color: white;
+}
+</style>
 </head>
 <body>
 <hidden id='username'></hidden>
 <hidden id='chef'></hidden>
 <div class="container">
 <h1 id='here'>Meals of the week</h1>
+<p>Click on meal to view ingredients & order</p>
 <ul id='weeklyMeals'>
 
 </ul>
@@ -30,7 +38,7 @@ $(document).ready(function() {
     $("#chef").val(getParameterByName('chef'));
     console.log("Username:" + $("#username").val());
     console.log("chef?:" + $("#chef").val());
-    
+        
 	$.ajax({
 		
 		url:"http://localhost:8080/mydb/rest/getWeeklyRecipes",
@@ -38,8 +46,20 @@ $(document).ready(function() {
 		success: function(response) {
 			var stringResponse = JSON.stringify(response);
 			console.log(stringResponse);
-		}
+			for(var i = 0; i < tempWeek.length; i++) {
+                $("#weeklyMeals").append("<li class='recipeSelect' id='recipe" + 
+                tempWeek[i].recipe.recipeId + 
+                    "'>" + tempWeek[i].recipe.description + "</li>");
+            }
+        
+                $("#weeklyMeals > li").click( function() {
+                    window.location.assign("recipe.html?username=" + $("#username").val() +
+                    "&chef=" + $("#chef").val() + "&recipeId=" + this.id[this.id.length -1]);
+                });
+		    }
 	});
+	
+
 
 /*	
 	$.ajax({

@@ -31,7 +31,6 @@
 
 <p> <button id='order' class="btn-primary">Add to Order</button> </p>
 <script>
-/* $("#Type").click( function() { */
 function getParameterByName(name) {
     name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
     var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
@@ -41,7 +40,10 @@ function getParameterByName(name) {
 
 
 $(document).ready(function() {
-	
+    $("#username").val(getParameterByName('username'));
+    $("#chef").val(getParameterByName('chef'));
+    console.log("Username:" + $("#username").val());
+    console.log("chef?:" + $("#chef").val());
 
 	$.ajax({
 		
