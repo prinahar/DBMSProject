@@ -55,7 +55,6 @@ $(document).ready(function() {
 
     if(getParameterByName("recipeId") != null && getParameterByName("recipeId") != "") {
 		    $.ajax({
-			
 			    url:"http://localhost:8080/mydb/rest/getRecipe/" + getParameterByName("recipeId"),
 			    type:"get",
 			    success: function(response) {

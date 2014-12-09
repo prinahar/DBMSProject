@@ -11,7 +11,7 @@
 <div class="container">
 <h1 id='here'> Bon Appetit!</h1>
 <p><input id="username" placeholder="Username" class="form-control"/></p>
-<p><input id="pass" placeholder="Password" class="form-control"/></p>
+<p><input id="pass" type="password" placeholder="Password" class="form-control"/></p>
 
 <button id='login' class="btn-primary">login</button> 
 <button id='reg' class="btn-primary">register</button> 
@@ -21,7 +21,20 @@ $("#login").click( function() {
 var username = $("#username").val();
 var pass = $("#pass").val();
 
-var newUser = {"userName":username,"cuisines":null,"orders":null,"payment":null,"restrictions":null,"person":{"userName":username,"dtype":"user","firstName":fname,"lastName":lname,"password":pass}};
+var newUser = {
+		"userName":username,
+		"cuisines":null,
+		"orders":null,
+		"payment":null,
+		"restrictions":null,
+		"person": {
+			"userName":username,
+			"dtype":"user",
+			"firstName":null,
+			"lastName":null,
+			"password":pass
+		}
+};
 alert(newUser);
 
 
