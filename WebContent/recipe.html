@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<title>Recipe</title>
+<script type="text/javascript" src="js/jquery.js"></script>
+<link href="css/bootstrap.css" rel="stylesheet"/>
+</head>
+
+<body>
+<div class = "container">
+<h1 id='recipeTitle'> Recipe! </h1>
+<p><img id='picture' width='200' ></img></p>
+<p> Cuisine: <span id='cuisine'></span></p>
+<p> Ingredients: 
+<ul id='ingredients'></ul>
+
+</ul>
+</p>
+<p> Steps: <span id='steps'></span></p>
+
+
+
+
+
+<p> <button id='order' class="btn-primary">Add to Order</button> </p>
+
+<hidden id='username'></hidden>
+<hidden id='chef'></hidden>
+<hidden id='recipeThis'></hidden>
+<script>
+function getParameterByName(name) {
+    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+        results = regex.exec(location.search);
+    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+}
+
+
+$(document).ready(function() {
+    $("#username").val(getParameterByName('username'));
+    $("#chef").val(getParameterByName('chef'));
+    console.log("Username:" + $("#username").val());
+    console.log("chef?:" + $("#chef").val());
+
+
+    if(getParameterByName("recipeId") != null && getParameterByName("recipeId") != "") {
+		    $.ajax({
+			
+			    url:"http://localhost:8080/mydb/rest/getRecipe/" + getParameterByName("recipeId"),
+			    type:"get",
+			    success: function(response) {
+			     
+				    console.log(response.description);
+				    $("#recipeTitle").html(response.description);
+				    $("#steps").html(response.steps);
+				    
+				    $("#picture").attr("width",400);
+				    $("#picture").attr("src",response.newpicture);
+				    console.log(response.newpicture);
+				    //$("#rating").html(response.description);
+				    $("#cuisine").html(response.cuisine.cuisineName);
+				    
+                    $.each(response.ingredients, function(key, value)  {
+                        $("#ingredients").append("<li>" + value.ingredientName + "</li>");
+                    });
+				    recipe = response;
+			    }
+		    }); 
+     }
+
+
+    if($("#chef").val() != "true") {
+        $(".forChef").hide();
+        $("#cuisine").prop('readonly', true);
+        $("#ingredient").prop('readonly', true);
+    }
+
+
+});
+
+</script>
+
+</div>
+
+
+</body>
+</html>
