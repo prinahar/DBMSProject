@@ -21,6 +21,7 @@ import mydb.dao.CuisineDao;
 import mydb.dao.Ingredient;
 import mydb.dao.IngredientDao;
 import mydb.dao.Payment;
+import mydb.dao.PaymentDao;
 import mydb.dao.Person;
 import mydb.dao.PersonDao;
 import mydb.dao.Recipe;
@@ -46,6 +47,7 @@ public class Rest {
 	ChefDao chefDao = new ChefDao();
 	TypeDao tdao = new TypeDao();
 	RecipeDao recipeDao = new RecipeDao();
+	PaymentDao payDao = new PaymentDao();
 	
 	@GET
 	@Path("/getAllUsers")
@@ -85,8 +87,8 @@ public class Rest {
 	@Path("/getPayment/{id}")
 	@Produces("application/json")
 	public Payment getPayment(@PathParam("id") String id) {
-		User u = getUser(id);
-		Payment paymentInfo = u.getPayment();
+		
+		Payment paymentInfo = payDao.findPaymentByName(id);
 		return paymentInfo;
 	}
 
@@ -164,28 +166,70 @@ public class Rest {
 		int id = recipeDao.addRecipe(r.getDescription(), realIngredients, c).getRecipeId();
 		return id;
 	}
-	@Path("/addPreference")
+	@Path("/addPreference/{id}")
 	@POST
 	@Consumes("application/json")
 	@Produces("application/json")
-	public void addPreference(Cuisine c , String username) {
+	public void addPreference(Cuisine c , @PathParam("id") String username) {
 		User u = udao.findUserByName(username);
 		List<Cuisine> prefs = u.getCuisines();
 		prefs.add(c);
 		udao.updateCuisine(u, prefs); 
 	}
 	
-	@Path("/addRestriction")
+	@Path("/addRestriction/{id}")
 	@POST
 	@Consumes("application/json")
 	@Produces("application/json")
-	public void addRestriction(Restriction r , String username) {
+	public void addRestriction(Restriction r , @PathParam("id") String username) {
 		User u = udao.findUserByName(username);
 		List<Restriction> lr = u.getRestrictions();
 		lr.add(r);
 		udao.updateRestriction(u, lr); 
 	}
 	
+	@Path("/updatePayment")
+	@POST
+	@Consumes("application/json")
+	@Produces("application/json")
+	public void updatePayment(Payment p) {
+		User u = udao.findUser(p.getUserName());
+		Payment pay = payDao.findPaymentByName(p.getUserName());
+		if (pay == null){
+			payDao.addPayment(u, p.getCreditCard(), p.getAddress());			
+		}
+		else {
+		 payDao.updateAddress(pay, p.getAddress());
+		 payDao.updateCreditCard(pay, p.getCreditCard());
+		}	
+	}
+	
+	@Path("/removeRestriction/{id}")
+	@POST
+	@Consumes("application/json")
+	@Produces("application/json")
+	public void removeRestriction(Restriction r , @PathParam("id") String username) {
+		User u = udao.findUserByName(username);
+		List<Restriction> lr = u.getRestrictions();
+		lr.remove(r);
+		udao.updateRestriction(u, lr); 
+	}
+	@Path("/getCurrentPreferences/{id}")
+	@GET
+	@Produces("application/json")
+	public List<Cuisine> getCurrentPreferences(@PathParam ("id") String username) {
+		User u = udao.findUserByName(username);
+		List<Cuisine> prefs = u.getCuisines();
+		return prefs;
+	}
+	@Path("/getCurrentRestrictions/{id}")
+	@GET
+	@Produces("application/json")
+	public List<Restriction> getCurrentRestrictions(@PathParam ("id") String username) {
+		User u = udao.findUserByName(username);
+		List<Restriction> restrictions = u.getRestrictions();
+		return restrictions;
+	}
 	@GET
 	@Path("/isChef")
 	@Produces("application/json")
@@ -246,7 +290,7 @@ public class Rest {
 	}
 	
 	public static void main(String[] args) {
-//		Rest rest = new Rest();
+		Rest rest = new Rest();
 //		IngredientDao idao = new IngredientDao();
 //		RecipeDao rdao = new RecipeDao();
 //		List<Ingredient> li = new ArrayList();
@@ -257,7 +301,7 @@ public class Rest {
 //		Recipe r = new Recipe(null, null, null, li ,c , null, null , null);
 //		rest.addRecipe(r);
 //		System.out.println(r);
-		
+//		System.out.println(rest.getCurrentPreferences("UserAlice"));
 
 		
 	}

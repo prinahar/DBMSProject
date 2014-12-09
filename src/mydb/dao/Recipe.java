@@ -26,6 +26,9 @@ public class Recipe implements Serializable {
 
 	@Lob
 	private byte[] picture;
+	
+	@Lob
+	private String newpicture;
 
 	@Lob
 	private String steps;
@@ -199,6 +202,18 @@ public class Recipe implements Serializable {
 		weeklyRecipe.setRecipe(null);
 
 		return weeklyRecipe;
+	}
+
+
+
+	public String getNewpicture() {
+		return newpicture;
+	}
+
+
+
+	public void setNewpicture(String newpicture) {
+		this.newpicture = newpicture;
 	}
 
 }

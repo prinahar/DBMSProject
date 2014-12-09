@@ -1,10 +1,77 @@
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<title>User Control Page</title>
+<script type="text/javascript" src="js/jquery.js"></script> 
+<!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> -->
+<link href="css/bootstrap.css" rel="stylesheet"/>
 </head>
 <body>
+<hidden id='username'></hidden>
+<hidden id='chef'></hidden>
+<div class="container">
+<h1 id='here'> Dietary Restrictions</h1>
+<p> <label> My Dietary Restrictions </p>
+<select id='restriction' multiple></select></label>
+<ul id='restrictions'>
 
+</ul>
+<script>
+
+function getParameterByName(name) {
+    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+        results = regex.exec(location.search);
+    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+}
+
+
+$(document).ready(function() {
+    $("#username").val(getParameterByName('username'));
+    $("#chef").val(getParameterByName('chef'));
+    console.log("Username:" + $("#username").val());
+    console.log("chef?:" + $("#chef").val());
+
+    });
+    
+    
+	$.ajax({
+		
+		url:"http://localhost:8080/mydb/rest/getRestrictions/",
+		type:"get",
+		success: function(response) {
+			var stringResponse = JSON.stringify(response);
+			console.log(stringResponse);
+			
+			$.each(response, function(key, value)  {
+				console.log(key);
+				console.log(value);
+				$("#restriction").append("<option value='restriction'>" + value.restriction + "</option>");
+				
+			});
+			$("#restriction").attr("size", response.length);
+		}
+	});
+	
+	$.ajax({
+		
+	url:"http://localhost:8080/mydb/rest/getCurrentRestrictions/" + getParameterByName('username'),
+	type:"get",
+	success: function(response) {
+		var stringResponse = JSON.stringify(response);
+		console.log(stringResponse);
+		
+		$.each(response, function(key, value)  {
+			console.log(key);
+			console.log(value);
+			$("#restriction").append("<option value='restriction'>" + value.restriction + "</option>");
+		});
+	}
+});
+
+
+</script>
+</div>
 </body>
 </html>

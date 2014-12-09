@@ -46,10 +46,10 @@ $(document).ready(function() {
 		success: function(response) {
 			var stringResponse = JSON.stringify(response);
 			console.log(stringResponse);
-			for(var i = 0; i < tempWeek.length; i++) {
+			for(var i = 0; i < response.length; i++) {
                 $("#weeklyMeals").append("<li class='recipeSelect' id='recipe" + 
-                tempWeek[i].recipe.recipeId + 
-                    "'>" + tempWeek[i].recipe.description + "</li>");
+                		response[i].recipe.recipeId + 
+                    "'>" + response[i].recipe.description + "</li>");
             }
         
                 $("#weeklyMeals > li").click( function() {

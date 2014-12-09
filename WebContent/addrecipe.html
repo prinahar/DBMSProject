@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
-<title>Home Page</title>
+<title>Recipe</title>
 <script type="text/javascript" src="js/jquery.js"></script>
 <link href="css/bootstrap.css" rel="stylesheet"/>
 </head>
@@ -21,15 +21,19 @@
 </p>
 <br />
 <br />
-<input type='text' id='addRecipeName' />
-<p> <button id='addRecipe' class="btn-primary">Add Recipe</button> </p><br />
-<input type='text' id='newIngredient' />
-<select id='type'></select>
- <button id='addIngredient' class="btn-primary">Add New Ingredient</button> 
+<input type='text' id='addRecipeName' class="forChef" />
+<p> <button id='addRecipe' class="btn-primary forChef">Add Recipe</button> </p><br />
+<input type='text' id='newIngredient' class="forChef" />
+<select id='type' class="forChef"></select>
+ <button id='addIngredient' class="btn-primary forChef">Add New Ingredient</button> 
 
 
 
-<p> <button id='order' class="btn-primary">Add to Order</button> </p>
+<p> <button id='order' class="btn-primary">Add to Weekly Recipes</button> </p>
+
+<hidden id='username'></hidden>
+<hidden id='chef'></hidden>
+<hidden id='recipeThis'></hidden>
 <script>
 function getParameterByName(name) {
     name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
@@ -38,6 +42,9 @@ function getParameterByName(name) {
     return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
 }
 
+var recipe = {"recipeId":3,"description":null,"picture":null,"steps":null,"ingredients":[{"ingredientName":"Butter","typeBean":{"type":"Dairy"}},{"ingredientName":"Chicken","typeBean":{"type":"Meat"}}],"cuisine":{"cuisineName":"Chinese"},"parent":null,"recipes":[]};
+
+
 
 $(document).ready(function() {
     $("#username").val(getParameterByName('username'));
@@ -45,6 +52,21 @@ $(document).ready(function() {
     console.log("Username:" + $("#username").val());
     console.log("chef?:" + $("#chef").val());
 
+
+    if(getParameterByName("recipeId") != null && getParameterByName("recipeId") != "") {
+		    $.ajax({
+			
+			    url:"http://localhost:8080/mydb/rest/getRecipe/" + getParameterByName("recipeId"),
+			    type:"get",
+			    success: function(response) {
+				    console.log(response.description);
+				    $("#recipeTitle").html(response.description);
+				    recipe = response;
+			    }
+		    }); 
+     }
+
+    console.log(recipe.ingredients[0]);
 	$.ajax({
 		
 		url:"http://localhost:8080/mydb/rest/getPreferences",
@@ -54,7 +76,7 @@ $(document).ready(function() {
 			$.each(response, function(key, value)  {
 				$("#cuisine").append("<option value='preference'>" + value.cuisineName + "</option>");
 			});
-			
+			$("#cuisine").attr("size", response.length);
 		}
 	});
 
@@ -86,18 +108,7 @@ $(document).ready(function() {
 		}
 	}); 
  	
- 	if(getParameterByName("recipeId") != null && getParameterByName("recipeId") != "") {
-		$.ajax({
-			
-			url:"http://localhost:8080/mydb/rest/getRecipe/" + getParameterByName("recipeId"),
-			type:"get",
-			success: function(response) {
-				console.log(response.description);
-				$("#recipeTitle").html(response.description);
-				
-			}
-		}); 
- 	}
+ 	
  	$("#addIngredient").click( function() {
  	 	var newIngredient = {ingredientName: $("#newIngredient").val(), typeBean: $("#type > option:selected").text()};
  	 	console.log(newIngredient);
@@ -140,6 +151,11 @@ $(document).ready(function() {
  			}
  		});
  	});
+
+    if($("#chef").val() != "true") {
+        $("body").html("This page only for Chef's");
+    }
+
 
 });
 

@@ -6,14 +6,20 @@
 <script type="text/javascript" src="js/jquery.js"></script> 
 <!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> -->
 <link href="css/bootstrap.css" rel="stylesheet"/>
+<style>
+
+</style>
 </head>
 <body>
 <hidden id='username'></hidden>
 <hidden id='chef'></hidden>
 <div class="container">
-<h1 id='here'> My Cuisine Preferences</h1>
-<button id='add' class="btn-primary">Add</button>
-<button id='remove' class="btn-primary">Remove</button>  
+<h1 id='here'> Cuisine Preferences</h1>
+<p> <label> My Cuisine Preferences </p>
+<select id='cuisine' multiple></select></label>
+<ul id='preferences'>
+</ul>
+<button id='update' class="btn-primary">Update</button> 
 <script>
 
 function getParameterByName(name) {
@@ -35,7 +41,7 @@ $(document).ready(function() {
     
 	$.ajax({
 		
-		url:"http://localhost:8080/mydb/rest/getPreferences",
+		url:"http://localhost:8080/mydb/rest/getPreferences/",
 		type:"get",
 		success: function(response) {
 			var stringResponse = JSON.stringify(response);
@@ -44,11 +50,32 @@ $(document).ready(function() {
 			$.each(response, function(key, value)  {
 				console.log(key);
 				console.log(value);
-				$("#cuisine").append("<option value='cuisineName'>" + value.cuisineName + "</option>");
+				$("#cuisine").append("<option value='cuisineName' id='" + value.cuisineName +
+						"'>" + value.cuisineName + "</option>");
 			});
+			$("#cuisine").attr("size", response.length);
 			
+			$.ajax({
+				
+				url:"http://localhost:8080/mydb/rest/getCurrentPreferences/" + getParameterByName('username'),
+				type:"get",
+				success: function(response) {
+					var stringResponse = JSON.stringify(response);
+					console.log(stringResponse);
+					
+					$.each(response, function(key, value)  {
+						console.log(key);
+						console.log(value);
+						$("#cuisine > #"+value.cuisineName).attr("selected", "selected");
+					});
+					$("#cuisine").focus();
+					}
+				});
 		}
 	});
+	
+	
+
 
 
 /* $("#add").click( function() {
