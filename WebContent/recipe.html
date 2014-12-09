@@ -6,7 +6,12 @@
 <script type="text/javascript" src="js/jquery.js"></script>
 <link href="css/bootstrap.css" rel="stylesheet"/>
 </head>
+<style>
+.restricted {
+	color:red;
+}
 
+</style>
 <body>
 <div class = "container">
 <h1 id='recipeTitle'> Recipe! </h1>
@@ -17,7 +22,11 @@
 </ul>
 </p>
 <p> Steps: <span id='steps'></span></p>
-<p> <button id='order' class="btn-primary">Add to Order</button> </p>
+<br />
+<p> Delivery Date <input type='date' id='delTime' /></p>
+<p> Quantity <input type='number' id='quantity' /></p>
+<p> <button id='order' class="btn-primary">Add to Order</button><span id='success'></span> </p>
+<p> <button id='vieworders' class="btn-primary">View Orders</button> </p>
 
 <hidden id='username'></hidden>
 <hidden id='chef'></hidden>
@@ -36,33 +45,78 @@ $(document).ready(function() {
     $("#chef").val(getParameterByName('chef'));
     console.log("Username:" + $("#username").val());
     console.log("chef?:" + $("#chef").val());
+    
+    var conflictingItems = [];
+	$.ajax({
+		
+	    url:"http://localhost:8080/mydb/rest/getConflictingIngredients?message=" + getParameterByName("username") +"%26" + getParameterByName("recipeId"),
+	    type:"get",
+	    success: function(response) {
+	    	console.log(response);
+	    	for(var i = 0; i < response.length; i++) {
+	    		console.log(response[i].ingredientName);
+	    		conflictingItems.push(response[i].ingredientName);
+	    	}
+	    	console.log(conflictingItems);
+	    	
+	    	if(getParameterByName("recipeId") != null && getParameterByName("recipeId") != "") {
+			    $.ajax({
+				
+				    url:"http://localhost:8080/mydb/rest/getRecipe/" + getParameterByName("recipeId"),
+				    type:"get",
+				    success: function(response) {
+				     
+					    console.log(response.description);
+					    $("#recipeTitle").html(response.description);
+					    $("#steps").html(response.steps);
+					    
+					    $("#picture").attr("width",400);
+					    $("#picture").attr("src",response.newpicture);
+					    console.log(response.newpicture);
+					    //$("#rating").html(response.description);
+					    $("#cuisine").html(response.cuisine.cuisineName);
+					    
+	                    $.each(response.ingredients, function(key, value)  {
+	                        if(conflictingItems.indexOf(value.ingredientName) != -1){
+	                    		$("#ingredients").append("<li class='restricted'>" + value.ingredientName + "</li>");
+	                        } else {
+	                        	$("#ingredients").append("<li>" + value.ingredientName + "</li>");
+	                        	
+	                        }
+	                    });
+					    recipe = response;
+					    console.log(response.ingredients);
+				    }
+			    }); 
+	     }
+	    }
+	});
 
+    
+	$("#order").click( function() {
 
-    if(getParameterByName("recipeId") != null && getParameterByName("recipeId") != "") {
-		    $.ajax({
-			
-			    url:"http://localhost:8080/mydb/rest/getRecipe/" + getParameterByName("recipeId"),
-			    type:"get",
-			    success: function(response) {
-			     
-				    console.log(response.description);
-				    $("#recipeTitle").html(response.description);
-				    $("#steps").html(response.steps);
-				    
-				    $("#picture").attr("width",400);
-				    $("#picture").attr("src",response.newpicture);
-				    console.log(response.newpicture);
-				    //$("#rating").html(response.description);
-				    $("#cuisine").html(response.cuisine.cuisineName);
-				    
-                    $.each(response.ingredients, function(key, value)  {
-                        $("#ingredients").append("<li>" + value.ingredientName + "</li>");
-                    });
-				    recipe = response;
-			    }
-		    }); 
-     }
+		$.ajax({
+			url:"http://localhost:8080/mydb/rest/addOrder?message=" + getParameterByName('username') + "%26" +
+																getParameterByName('weeklyid') + "%26" +
+																$("#delTime").val() + "%26" +
+																$("#quantity").val(),
+			type:"post",
+			dataType:"json",
+			contentType:"application/json",
+			success: function(response) {
+				console.log(JSON.stringify(response));
+				$("#success").html("Order added!");
+			}
+		});
+		
+	});
 
+    
+	$("#vieworders").click( function() {
+		window.location.assign("orderhistory.html?username=" + getParameterByName('username'));
+		
+	});
+    
 
     if($("#chef").val() != "true") {
         $(".forChef").hide();

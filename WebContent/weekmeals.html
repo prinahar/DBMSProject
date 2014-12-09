@@ -23,6 +23,8 @@
 <ul id='weeklyMeals'>
 
 </ul>
+
+<button id='addrecipe'>Add Recipe</button>
 <script>    
 
 function getParameterByName(name) {
@@ -59,6 +61,15 @@ $(document).ready(function() {
 		    }
 	});
 	
+	
+	
+	if(getParameterByName('chef') != "true") {
+        $("#addrecipe").hide();
+    }
+	
+	$("#addrecipe").click(function() {
+		window.location.assign("addrecipe.html?username=" + $("#username").val() + "&chef=true"); 
+	});
 
 
 /*	

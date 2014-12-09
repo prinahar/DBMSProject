@@ -1,18 +1,29 @@
 package rest;
 
+import mydb.dao.*;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.math.BigInteger;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+
+import com.sun.jersey.spi.container.ParamQualifier;
 
 import mydb.dao.Chef;
 import mydb.dao.ChefDao;
@@ -20,6 +31,9 @@ import mydb.dao.Cuisine;
 import mydb.dao.CuisineDao;
 import mydb.dao.Ingredient;
 import mydb.dao.IngredientDao;
+import mydb.dao.Order;
+import mydb.dao.OrderDao;
+import mydb.dao.OrderRecipe;
 import mydb.dao.Payment;
 import mydb.dao.PaymentDao;
 import mydb.dao.Person;
@@ -48,6 +62,7 @@ public class Rest {
 	TypeDao tdao = new TypeDao();
 	RecipeDao recipeDao = new RecipeDao();
 	PaymentDao payDao = new PaymentDao();
+	OrderDao odao = new OrderDao();
 	
 	@GET
 	@Path("/getAllUsers")
@@ -70,8 +85,12 @@ public class Rest {
 		String pass = info[1];
 		Person p = pdao.findPersonByName(username);
 		System.out.println(p.getFirstName());
-		if(p.getPassword().equals(pass))
+		if(p.getPassword().equals(pass)){
+			System.out.println("true");
 			return "true";
+		}
+		System.out.println(pass);
+		System.out.println(p.getPassword());
 		return "false";
 	}
 
@@ -138,6 +157,33 @@ public class Rest {
 	public List<Type> getAllTypes() {
 		List<Type> lt = tdao.findAllTypes();
 		return lt;
+	}
+	
+	
+	@GET
+	@Path("/getAPI1/{search}")
+	@Produces("application/json")
+	public String getAPI(@PathParam("search") String search){
+		String oldUrl = "http://food2fork.com/api/search?key=e4af297b5e970060cbb31ae78655b9ce&q="+search;
+		String json = "";
+		try {
+			URL url = new URL(oldUrl);
+			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+			connection.setRequestMethod("GET");
+			InputStream stream = connection.getInputStream();
+			InputStreamReader reader = new InputStreamReader(stream);
+			BufferedReader buffer = new BufferedReader(reader);
+			String line;
+			//String json = "";
+			while((line = buffer.readLine()) != null) {
+				json += line;
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+		return json;
+		
 	}
 	
 	@Path("/addIngredient")
@@ -222,6 +268,7 @@ public class Rest {
 		List<Cuisine> prefs = u.getCuisines();
 		return prefs;
 	}
+	
 	@Path("/getCurrentRestrictions/{id}")
 	@GET
 	@Produces("application/json")
@@ -230,10 +277,21 @@ public class Rest {
 		List<Restriction> restrictions = u.getRestrictions();
 		return restrictions;
 	}
-	@GET
-	@Path("/isChef")
+	
+	@Path("/updateCurrentRestrictions/{id}")
+	@PUT
+	@Consumes("application/json")
 	@Produces("application/json")
-	public String isChef(@PathParam("date") String username) {
+	public List<Restriction> updateCurrentRestrictions(@PathParam ("id") String username, List<Restriction> newRestrictions) {
+		User u = udao.findUserByName(username);
+		udao.updateRestriction(u, newRestrictions);
+		return newRestrictions;
+	}
+	
+	@GET
+	@Path("/isChef/{id}")
+	@Produces("application/json")
+	public String isChef(@PathParam("id") String username) {
 		ChefDao cdao = new ChefDao();
 		Chef c = cdao.findChefByName(username);
 		if(c == null){
@@ -241,6 +299,64 @@ public class Rest {
 		}
 		return "true";
 	}
+	
+	@GET
+	@Path("/getConflictingIngredients")
+	@Produces("application/json")
+	public List<Ingredient> getConflictingIngredients(@QueryParam("message") String message){
+		String[] info = message.split("&");
+		String username = info[0];
+		int recipeId = Integer.parseInt(info[1]);
+		User u = udao.findUser(username);
+		HashSet<String> restrictionTypes = new HashSet<String>();
+		for(Restriction rIter: u.getRestrictions()){
+			for(Type tIter: rIter.getTypes()){
+				restrictionTypes.add(tIter.getType());
+			}
+		}
+		Recipe r = recipeDao.findRecipeById(recipeId);
+		List<Ingredient> res = new LinkedList<Ingredient>();
+		for(Ingredient iIter: r.getIngredients()){
+			if(restrictionTypes.contains(iIter.getTypeBean().getType()))
+				res.add(iIter);
+		}
+		return res;
+		
+	}
+	
+	@POST
+	@Path("/addOrder")
+	@Produces("application/json")
+	public User addOrder(@QueryParam("message") String message){
+		System.out.println(message);
+		String[] info = message.split("&");
+		String username = info[0];
+		int weeklyId = Integer.parseInt(info[1]);
+		String[] dateInfo = info[2].split("-");
+		int quantity = Integer.parseInt(info[3]);
+		int year = Integer.parseInt(dateInfo[0]);
+		int month = Integer.parseInt(dateInfo[1]);
+		int day = Integer.parseInt(dateInfo[2]);
+		Date date = new Date(year, month, day);
+		WeeklyRecipe r = wrdao.findWeeklyRecipeById(weeklyId);
+		User u = udao.findUser(username);
+		odao.createOrder(r, u, date, quantity);
+		return u;
+	}
+	
+	@GET
+	@Path("/getOrder/{id}")
+	@Produces("application/json")
+	public List<OrderRecipe> getOrder(@PathParam("id") String username){
+		List<Order> orders = odao.findOrderByUser(username);
+		List<OrderRecipe> res = new LinkedList<OrderRecipe>();
+		for(Order iter: orders){
+			OrderRecipe or = new OrderRecipe(iter, iter.getWeeklyRecipe().getRecipe().getDescription());
+			res.add(or);
+		}
+		return res;
+	}
+	
 	
 	@GET
 	@Path("/getWeeklyRecipes")
@@ -254,7 +370,8 @@ public class Rest {
 	@Path("/createUser")
 	@POST
 	@Consumes("application/json")
-	public String createUser(User u) {
+	@Produces("application/json")
+	public Person createUser(User u) {
 		Person p = u.getPerson();
 		pdao.addPerson(p);
 		// System.out.println(p.getFirstName());
@@ -282,9 +399,9 @@ public class Rest {
 			}
 		}
 		//if(u.getRestrictions() == null)
-			System.out.println(u.getRestrictions().get(0).getRestriction());
+			//System.out.println(u.getRestrictions().get(0).getRestriction());
 		udao.addUser(p, realCuisines, realRestrictionList);
-		return u.getUserName();
+		return p;
 		
 		//TODO: Chef finds Orders for the given week
 	}

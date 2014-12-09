@@ -14,42 +14,48 @@
 <p><input id="pass" type="password" placeholder="Password" class="form-control"/></p>
 
 <button id='login' class="btn-primary">login</button> 
-<button id='reg' class="btn-primary">register</button> 
+<button id='reg' class="btn-primary" >register</button> 
 <script>
+
+$("#reg").click( function() {
+	window.location.assign("signin.html");
+});
 $("#login").click( function() {
 
 var username = $("#username").val();
 var pass = $("#pass").val();
 
-var newUser = {
-		"userName":username,
-		"cuisines":null,
-		"orders":null,
-		"payment":null,
-		"restrictions":null,
-		"person": {
-			"userName":username,
-			"dtype":"user",
-			"firstName":null,
-			"lastName":null,
-			"password":pass
-		}
-};
-alert(newUser);
 
 
 	$.ajax({
-		url:"http://localhost:8080/mydb/rest/login?id="+username+"%26"+"pass="+pass,
+		url:"http://localhost:8080/mydb/rest/login?id="+username+"%26"+pass,
 		type:"get",
-		data:JSON.stringify(newUser),
 		dataType:"json",
 		contentType:"application/json",
 		success: function(response) {
 			var stringResponse = JSON.stringify(response);
-			if(stringResponse === "false")
-				alert("false");
-			else
-				alert("true");
+			if(stringResponse === "false") {
+				alert("Incorrect Username/password");
+				console.log("U:" + username + "\n P:" + pass);
+		}
+			else {
+				$.ajax({
+		        url:"http://localhost:8080/mydb/rest/isChef/"+username,
+		        type:"get",
+		        success: function(response2) {
+		            var stringResponse2 = JSON.stringify(response2);
+			        if(stringResponse2 === "false") {
+		            window.location.assign("usercontrol.html?username=" + $("#username").val() +
+		            "&chef=" + JSON.stringify(response2));
+		            } else {
+		            window.location.assign("weekmeals.html?username=" + $("#username").val() +
+		            "&chef=" + JSON.stringify(response2));
+		            }
+		        }
+				
+		        });
+			}
+	
 		}
 	});
 

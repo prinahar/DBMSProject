@@ -28,12 +28,11 @@
  <button id='addIngredient' class="btn-primary forChef">Add New Ingredient</button> 
 
 
-
-<p> <button id='order' class="btn-primary">Add to Weekly Recipes</button> </p>
-
 <hidden id='username'></hidden>
 <hidden id='chef'></hidden>
 <hidden id='recipeThis'></hidden>
+<br /><br />
+<input type="text" id="search" />
 <script>
 function getParameterByName(name) {
     name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
@@ -90,6 +89,7 @@ $(document).ready(function() {
 			$.each(response, function(key, value)  {
 				$("#ingredient").append("<option value='" + value.typeBean.type + "'>" + value.ingredientName + "</option>");
 			});
+			$("#ingredient").attr("size", response.length);
 			
 		}
 	});
@@ -155,11 +155,21 @@ $(document).ready(function() {
         $("body").html("This page only for Chef's");
     }
 
+    $("#searchButton").click( function() {
+    $.ajax({
+			url:"http://localhost:8080/mydb/rest/getAPI1/" + $("#search").val(),
+			type:"get",
+			contentType:"application/json",
+			success: function(response) {
+				console.log(response);
+			}
+		});
+    });
 
 });
 
 </script>
-
+<button id="searchButton" >Search API for Recipes</button>
 </div>
 
 

@@ -33,6 +33,16 @@ public class OrderDao {
 		em.getTransaction().commit();
 		return order;
 	}
+	
+	public List<Order> findOrderByUser(String username) {
+		em.getTransaction().begin();
+		Query q = em
+				.createQuery("Select o from Order o where o.user.userName = :u");
+		q.setParameter("u", username);
+		List<Order> orders = q.getResultList();
+		em.getTransaction().commit();
+		return orders;
+	}
 
 	public Order findOrder(WeeklyRecipe wr, User u) {
 		em.getTransaction().begin();

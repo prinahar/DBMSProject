@@ -37,6 +37,7 @@ $(document).ready(function() {
 				console.log(value);
 				$("#cuisine").append("<option value='cuisineName'>" + value.cuisineName + "</option>");
 			});
+			$('#cuisine').attr("size", response.length);
 			
 		}
 	});
@@ -54,11 +55,12 @@ $(document).ready(function() {
 				console.log(value);
 				$("#restrictions").append("<option value='restriction'>" + value.restriction + "</option>");
 			});
+			$('#restrictions').attr("size", response.length);
 			
 		}
 	});
 	
-});
+
 
 $("#add").click( function() {
 
@@ -80,10 +82,7 @@ for( var i = 0; i < prefRestrictions.length; i++) {
 	restrictions.push({restriction:prefRestrictions[i].innerHTML});
 }
 
-//alert(JSON.stringify(prefs));
-
 var newUser = {"userName":username,"cuisines":prefs,"orders":null,"payment":null,"restrictions":restrictions,"person":{"userName":username,"dtype":"user","firstName":fname,"lastName":lname,"password":pass}};
-console.log(newUser);
 
 
 	$.ajax({
@@ -93,10 +92,15 @@ console.log(newUser);
 		dataType:"json",
 		contentType:"application/json",
 		success: function(response) {
-			var stringResponse = JSON.stringify(response);
-			$('here').innerHTML = stringResponse;
+			
+			window.location.assign("usercontrol.html?username=" + response.userName);
 		}
 	});
+	
+
+
+
+});
 
 
 });

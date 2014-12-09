@@ -14,9 +14,7 @@
 <h1 id='here'> Dietary Restrictions</h1>
 <p> <label> My Dietary Restrictions </p>
 <select id='restriction' multiple></select></label>
-<ul id='restrictions'>
-
-</ul>
+<button id='update' class="btn-primary">Update</button> 
 <script>
 
 function getParameterByName(name) {
@@ -33,9 +31,6 @@ $(document).ready(function() {
     console.log("Username:" + $("#username").val());
     console.log("chef?:" + $("#chef").val());
 
-    });
-    
-    
 	$.ajax({
 		
 		url:"http://localhost:8080/mydb/rest/getRestrictions/",
@@ -47,28 +42,67 @@ $(document).ready(function() {
 			$.each(response, function(key, value)  {
 				console.log(key);
 				console.log(value);
-				$("#restriction").append("<option value='restriction'>" + value.restriction + "</option>");
+				$("#restriction").append("<option value='restriction' id="+ value.restriction +">" + value.restriction + "</option>");
 				
 			});
 			$("#restriction").attr("size", response.length);
+			$.ajax({
+				
+				url:"http://localhost:8080/mydb/rest/getCurrentRestrictions/" + getParameterByName('username'),
+				type:"get",
+				success: function(response) {
+					var stringResponse = JSON.stringify(response);
+					console.log(stringResponse);
+					
+					$.each(response, function(key, value)  {
+						console.log(key);
+						console.log(value);
+						$("#restriction > #"+value.restriction).attr("selected", "selected");
+					});
+					$("#restriction").focus();
+				}
+			});
+			
 		}
 	});
 	
-	$.ajax({
+	
+	
+	$("#update").click( function() {
 		
-	url:"http://localhost:8080/mydb/rest/getCurrentRestrictions/" + getParameterByName('username'),
-	type:"get",
-	success: function(response) {
-		var stringResponse = JSON.stringify(response);
-		console.log(stringResponse);
-		
-		$.each(response, function(key, value)  {
-			console.log(key);
-			console.log(value);
-			$("#restriction").append("<option value='restriction'>" + value.restriction + "</option>");
+		var newRestrictions = [];
+		var selectedRestrictions = $("#restriction > option:selected");
+		for(var i = 0; i < selectedRestrictions.length; i++) {
+			newRestrictions.push({'restriction': selectedRestrictions[i].id});
+		}
+		console.log(newRestrictions);
+		$.ajax({
+			url:"http://localhost:8080/mydb/rest/updateCurrentRestrictions/" + getParameterByName('username'),
+			type:"put",
+			data:JSON.stringify(newRestrictions),
+			dataType:"json",
+			contentType:"application/json",
+			success: function(response) {
+				console.log(JSON.stringify(response));
+			}
 		});
-	}
-});
+		
+	});
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    });
+    
+    
+	
+	
+	
 
 
 </script>

@@ -12,8 +12,8 @@
 <hidden id='chef'></hidden>
 <div class="container">
 <h1 id='here'>Order History</h1>
-<!--
-    <table>
+
+    <table id='orderTable'>
         <tr>
 	        <th>Order id</th>
 	        <th>accepted?</th>
@@ -26,7 +26,10 @@
 	        <th>Recipe Name</th>
 	    </tr>
     </table>
--->
+
+
+
+
 <script>
 
 function getParameterByName(name) {
@@ -44,9 +47,31 @@ $(document).ready(function() {
     console.log("chef?:" + $("#chef").val());
     
     
-    $("button").click( function() {
-        window.location.assign(this.id + ".html?username=" + $("#username").val());
-    });
+$.ajax({
+		
+		url:"http://localhost:8080/mydb/rest/getOrder/" + getParameterByName('username'),
+		type:"get",
+		success: function(response) {
+			var stringResponse = JSON.stringify(response);
+			console.log(stringResponse);
+			
+			for(var i = 0; i < response.length; i++){
+					 
+				$("#orderTable").append("<tr>" +
+			        "<th>"+ response[i].order.id.weeklyRecipeId +"</th> " +
+			        "<th>"+ response[i].order.accepted +"</th> " +
+			        "<th>"+ response[i].order.comment +"</th> " +
+			        "<th>"+ response[i].order.confirmation +"</th> " +
+			        "<th>"+ Date(response[i].order.deliveryTime) +"</th> " +
+			        "<th>"+ response[i].order.orderComplete +"?</th> " +
+			       	 "<th>"+ response[i].order.quantity +"</th> " +
+			       	 "<th>"+ response[i].order.rating +"</th> " +
+			        	"<th>"+ response[i].recipeName +"</th> " +
+		    		"</tr>")
+			}
+		}
+});
+
     
 
     
