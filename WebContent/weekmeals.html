@@ -49,14 +49,15 @@ $(document).ready(function() {
 			var stringResponse = JSON.stringify(response);
 			console.log(stringResponse);
 			for(var i = 0; i < response.length; i++) {
-                $("#weeklyMeals").append("<li class='recipeSelect' id='recipe" + 
+                $("#weeklyMeals").append("<li class='recipeSelect' id='" + response[i].weeklyRecipeId + "recipe" + 
                 		response[i].recipe.recipeId + 
                     "'>" + response[i].recipe.description + "</li>");
             }
         
                 $("#weeklyMeals > li").click( function() {
                     window.location.assign("recipe.html?username=" + $("#username").val() +
-                    "&chef=" + $("#chef").val() + "&recipeId=" + this.id[this.id.length -1]);
+                    "&chef=" + $("#chef").val() + "&recipeId=" + this.id[this.id.length -1] +
+                    "&weeklyid=" + this.id.substring(0, 2));
                 });
 		    }
 	});
